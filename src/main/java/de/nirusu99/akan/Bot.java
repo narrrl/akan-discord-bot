@@ -1,0 +1,55 @@
+package de.nirusu99.akan;
+
+import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
+
+import javax.security.auth.login.LoginException;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.net.URISyntaxException;
+
+public class Bot extends ListenerAdapter {
+    private static final String TOKEN = "token";
+    public static void start() throws LoginException, URISyntaxException {
+        File file = new File(Bot.class.getResource(File.separator).toURI().getPath() + Bot.TOKEN);
+        final String token;
+        try {
+            token = new BufferedReader(new FileReader(file)).readLine();
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return;
+        }
+        if (token == null) {
+            System.err.println("token is empty!");
+            return;
+        }
+        build(token);
+    }
+
+    public static void build(final String token)
+            throws LoginException
+    {
+        JDABuilder jda = JDABuilder.createDefault(token);
+        jda.addEventListeners(new Bot()).setActivity(Activity.playing("Hewwo Senpai")).build();
+    }
+
+    @Override
+    public void onMessageReceived(MessageReceivedEvent event)
+    {
+        Message msg = event.getMessage();
+        if (msg.getContentRaw().equals("akan!ping"))
+        {
+            MessageChannel channel = event.getChannel();
+            long time = System.currentTimeMillis();
+            channel.sendMessage("Pong!")
+                    .queue(response -> {
+                        response.editMessageFormat("Pong: %d ms", System.currentTimeMillis() - time).queue();
+                    });
+        }
+    }
+}
