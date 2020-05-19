@@ -2,6 +2,7 @@ package de.nirusu99.akan;
 
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.entities.Emote;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -15,6 +16,8 @@ import java.net.URISyntaxException;
 
 public class Bot extends ListenerAdapter {
     private static final String TOKEN = "token";
+    private static String PREFIX = "akan!";
+    private static final String NIRUSU_ID = "208979474988007425";
     public static void start() throws LoginException, URISyntaxException {
         File file = new File(Bot.class.getResource(File.separator).toURI().getPath() + Bot.TOKEN);
         final String token;
@@ -42,7 +45,7 @@ public class Bot extends ListenerAdapter {
     public void onMessageReceived(MessageReceivedEvent event)
     {
         Message msg = event.getMessage();
-        if (msg.getContentRaw().equals("akan!ping"))
+        if (msg.getContentRaw().equals(Bot.PREFIX + "ping"))
         {
             MessageChannel channel = event.getChannel();
             long time = System.currentTimeMillis();
@@ -50,6 +53,9 @@ public class Bot extends ListenerAdapter {
                     .queue(response -> {
                         response.editMessageFormat("Pong: %d ms", System.currentTimeMillis() - time).queue();
                     });
+        } else if (msg.getContentRaw().equals(Bot.PREFIX + "stop")) {
+            event.getChannel().sendMessage("Bai Bai <:megu:666743067755151360>").queue();
+            System.exit(0); // I'm sry
         }
     }
 }
