@@ -4,11 +4,11 @@ import de.nirusu99.akan.AkanBot;
 import de.nirusu99.akan.images.GelbooruImage;
 import de.nirusu99.akan.images.ImageSearch;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.Activity;
-import net.dv8tion.jda.api.entities.MessageChannel;
-import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -348,6 +348,40 @@ public enum CMD {
         @Override
         public String toString() {
             return "reacts to your message when it gets executed";
+        }
+    },
+    SETAVATAR("setavatar") {
+        @Override
+        void run(AkanBot bot, MessageReceivedEvent event, Matcher matcher) {
+            if(CMD.userIsOwner(event.getAuthor())) {
+                List<Message.Attachment> attachment = event.getMessage().getAttachments();
+                if (attachment.size() != 1) throw new IllegalArgumentException("You must attach one image");
+                File file = new File(attachment.get(0).getFileName());
+                attachment.get(0).downloadToFile(file);
+                Icon icon;
+                try {
+
+                    icon = Icon.from(file);
+                } catch (IOException e) {
+                    if (!file.delete()) System.err.println("couldn't delete picture!");
+                    throw new IllegalArgumentException(e.getMessage());
+                }
+                event.getJDA().getSelfUser().getManager().setAvatar(icon).complete();
+                event.getChannel().sendMessage("updated avatar!").complete();
+                if (!file.delete()) System.err.println("couldn't delete picture!");
+            } else {
+                event.getChannel().sendMessage("Only the bot owner can change the avatar").complete();
+            }
+        }
+
+        @Override
+        String syntax() {
+            return "<prefix>setavatar";
+        }
+
+        @Override
+        public String toString() {
+            return "changes the avatar of the bot. You have to attach a image";
         }
     };
 
