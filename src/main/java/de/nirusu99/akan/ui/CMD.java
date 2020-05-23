@@ -329,6 +329,26 @@ public enum CMD {
         public String toString() {
             return "list all commands";
         }
+    },
+    CHECK("check ("+ CMD.BOOLEAN_REGEX +")") {
+        @Override
+        void run(AkanBot bot, MessageReceivedEvent event, Matcher matcher) {
+            if (CMD.userIsOwner(event.getAuthor())) {
+                bot.setCheckMark(Boolean.parseBoolean(matcher.group(1)));
+            } else {
+                event.getChannel().sendMessage("Only owner can do that").queue();
+            }
+        }
+
+        @Override
+        String syntax() {
+            return "<prefix>check <true|false>";
+        }
+
+        @Override
+        public String toString() {
+            return "reacts to your message when it gets executed";
+        }
     };
 
     private static final String LINE_BREAK = "\n";
@@ -341,6 +361,7 @@ public enum CMD {
     private static final String NAMING_REGEX = "[\\p{L}_$&+,:;=?@#'<>.^*()%!-]+";
     private static final String PREFIX_REGEX = "[\\p{L}_$&+,:;=?@#'<>.^*()%!-]+";
     private static final String[] OWNERS = {"208979474988007425", "244607816587935746"};
+    private static final String BOOLEAN_REGEX = "true|false";
     private final Pattern pattern;
 
     CMD(final String pattern) {
@@ -367,6 +388,9 @@ public enum CMD {
             final Matcher matcher = i.pattern.matcher(input);
             if (matcher.matches()) {
                 i.run(bot, event, matcher);
+                if (bot.isCheckMark()) {
+                    event.getMessage().addReaction("ayayayhyper:567486942086692872").queue();
+                }
                 return;
             }
         }

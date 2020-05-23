@@ -17,6 +17,7 @@ public class AkanBot extends ListenerAdapter {
     private static final String DEFAULT_PREFIX = "a!";
     private final JDABuilder jda;
     private String prefix = AkanBot.DEFAULT_PREFIX;
+    private boolean checkMark;
 
     AkanBot(final String token) throws LoginException, InterruptedException {
         this.jda = JDABuilder.createDefault(token);
@@ -24,6 +25,7 @@ public class AkanBot extends ListenerAdapter {
                 .setActivity(Activity.playing("Hewwo Senpai")).build().awaitReady();
         jda.setAutoReconnect(true)
                 .setStatus(OnlineStatus.ONLINE);
+        checkMark = false;
     }
 
     /**
@@ -52,6 +54,14 @@ public class AkanBot extends ListenerAdapter {
             throw new IllegalArgumentException("token is empty!");
         }
         new AkanBot(token);
+    }
+
+    public boolean isCheckMark() {
+        return checkMark;
+    }
+
+    public void setCheckMark(boolean checkMark) {
+        this.checkMark = checkMark;
     }
 
     public void setPrefix(String prefix) {
