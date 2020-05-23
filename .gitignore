@@ -36,6 +36,9 @@ repo/
 bin/
 target/
 
+#gradle
+build
+
 # IntelliJ IDE
 .idea
 *.iws
