@@ -80,7 +80,7 @@ public enum CMD {
     /**
      *
      */
-    SEARCH("search (" + CMD.NAMING_REGEX + ") (" + CMD.INT_REGEX + ") (" + CMD.INT_REGEX + ")") {
+    SEARCH("search (" + CMD.TAGS_REGEX + ") (" + CMD.INT_REGEX + ") (" + CMD.INT_REGEX + ")") {
         @Override
         void run(AkanBot bot, MessageReceivedEvent event, Matcher matcher) {
             int amount = Integer.parseInt(matcher.group(2));
@@ -153,7 +153,9 @@ public enum CMD {
         }
     };
     
-    private static final String INT_REGEX = "[0-9]+";
+    private static final String TAGS_REGEX = "[\\p{L}\\d" + CMD.SPECIAL_CHARS + "]+";
+    private static final String SPECIAL_CHARS = "_$&+,:;=?@#'<>.^*()%!-";
+    private static final String INT_REGEX = "\\d+";
     private static final String NAMING_REGEX = "[\\p{L}_$&+,:;=?@#'<>.^*()%!-]+";
     private static final String PREFIX_REGEX = "[\\p{L}_$&+,:;=?@#'<>.^*()%!-]+";
     private static final String[] OWNERS = {"208979474988007425", "244607816587935746"};
