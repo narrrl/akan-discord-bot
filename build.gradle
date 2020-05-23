@@ -1,0 +1,19 @@
+plugins {
+    id 'java'
+}
+
+group 'de.nirusu99'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+    jcenter()
+    maven {
+        url  "https://dl.bintray.com/kodehawa/maven"
+    }
+}
+
+dependencies {
+    compile 'net.dv8tion:JDA:4.1.1_154'
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}

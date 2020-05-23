@@ -11,6 +11,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import javax.security.auth.login.LoginException;
 import java.io.*;
 import java.net.URISyntaxException;
+import java.nio.file.Paths;
 
 public class AkanBot extends ListenerAdapter {
     public static final String DEFAULT_PREFIX = "akan!";
@@ -34,7 +35,8 @@ public class AkanBot extends ListenerAdapter {
     }
 
     public static void start() throws LoginException, URISyntaxException, InterruptedException {
-        File file = new File(AkanBot.class.getResource(File.separator).toURI().getPath() + AkanBot.TOKEN);
+        File file = new File(Paths.get("").toUri().getPath()
+                + "\\src\\main\\resources\\de\\nirusu99\\akan\\token");
         final String token;
         try {
             token = new BufferedReader(new FileReader(file)).readLine();
@@ -70,19 +72,6 @@ public class AkanBot extends ListenerAdapter {
                 event.getChannel().sendMessage(e.getMessage()).queue();
             }
         }
-        /*
-        if (msg.getContentRaw().equals(Bot.PREFIX + "ping"))
-        {
-            MessageChannel channel = event.getChannel();
-            long time = System.currentTimeMillis();
-            channel.sendMessage("Pong!")
-                    .queue(response -> {
-                        response.editMessageFormat("Pong: %d ms", System.currentTimeMillis() - time).queue();
-                    });
-        } else if (msg.getContentRaw().equals(Bot.PREFIX + "stop")) {
-            event.getChannel().sendMessage("Bai Bai <:megu:666743067755151360>").queue();
-            System.exit(0); // I'm sry
-        }*/
     }
 
 }
