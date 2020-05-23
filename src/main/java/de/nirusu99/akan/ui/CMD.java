@@ -4,6 +4,7 @@ import de.nirusu99.akan.AkanBot;
 import de.nirusu99.akan.images.GelbooruImage;
 import de.nirusu99.akan.images.ImageSearch;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -35,6 +36,11 @@ public enum CMD {
                 throw new IllegalArgumentException("Only bot owner can do that!");
             }
         }
+
+        @Override
+        String syntax() {
+            return "<prefix>exit";
+        }
     },
     /**
      * Pings the bot and sends a not so accurate ping, but it will do its job
@@ -48,6 +54,11 @@ public enum CMD {
                     .queue(response -> response
                             .editMessageFormat("Pong: %d ms <a:loading:529887640472911922>",
                                     System.currentTimeMillis() - time).queue());
+        }
+
+        @Override
+        String syntax() {
+            return "<prefix>ping";
         }
 
         @Override
@@ -71,6 +82,11 @@ public enum CMD {
             } else {
                 throw new IllegalArgumentException("Only bot owner can do that!");
             }
+        }
+
+        @Override
+        String syntax() {
+            return "<prefix>prefix <new prefix>";
         }
 
         @Override
@@ -118,9 +134,13 @@ public enum CMD {
         }
 
         @Override
+        String syntax() {
+            return "<prefix>search <tag+tag+tag...> <amount> <page>";
+        }
+
+        @Override
         public String toString() {
-            return "Searches images by tags on Gelbooru. Tags are separated by a +\n"
-                    + "Syntax is <prefix>search <tags> <amount> <page>";
+            return "Searches images by tags on Gelbooru. Tags are separated by a +";
         }
     },
     /**
@@ -131,6 +151,11 @@ public enum CMD {
         void run(AkanBot bot, MessageReceivedEvent event, Matcher matcher) {
             event.getChannel().sendMessage("Invite link: " + "https://discordapp.com/oauth2/authorize?&client_id="
                     + event.getJDA().getSelfUser().getId() + "&scope=bot&permissions=8").queue();
+        }
+
+        @Override
+        String syntax() {
+            return "<prefix>invite";
         }
 
         @Override
@@ -192,6 +217,54 @@ public enum CMD {
             }
             event.getChannel().sendMessage(out.toString().replace(" ", "\n")).queue();
         }
+
+        @Override
+        public String toString() {
+            return "Sends the user message converted to emotes";
+        }
+
+        @Override
+        String syntax() {
+            return "<prefix>rep <message>";
+        }
+    },
+    /**
+     * Set the bot status
+     */
+    STATUS("status (" + CMD.ACTIVITY_TYPE_REGEX + ") (" + CMD.STATUS_REGEX + ")") {
+        @Override
+        void run(AkanBot bot, MessageReceivedEvent event, Matcher matcher) {
+            if (CMD.userIsOwner(event.getAuthor())) {
+                switch (matcher.group(1)) {
+                    case "playing":
+                        event.getJDA().getPresence().setActivity(Activity.playing(matcher.group(2)));
+                        break;
+                    case "listening":
+                        event.getJDA().getPresence().setActivity(Activity.listening(matcher.group(2)));
+                        break;
+                    case "watching":
+                        event.getJDA().getPresence().setActivity(Activity.watching(matcher.group(2)));
+                        break;
+                    case "streaming":
+                        String[] str = matcher.group(2).split(" ", 2);
+                        if (str.length != 2) {
+                            throw new IllegalArgumentException("a!status streaming <streamtitle> <url>");
+                        }
+                        event.getJDA().getPresence().setActivity(Activity.streaming(str[0], str[1]));
+                        break;
+                    default:
+                        event.getChannel().sendMessage("invalid status type").queue();
+                }
+            } else {
+                event.getChannel().sendMessage("Only owner can set the bot status").queue();
+            }
+        }
+
+        @Override
+        String syntax() {
+            return "<prefix>status (listening|playing|watching) <message>\n"
+                    + "<prefix>status streaming <<message> <url>>";
+        }
     },
     /**
      * Help command that checks if a command with than name exists and then sends its toString to the channel.
@@ -206,14 +279,62 @@ public enum CMD {
                 if (input.equals(c.name().toLowerCase())) {
                     emb.setTitle(c.name())
                             .setThumbnail(event.getGuild().getIconUrl())
-                            .setDescription(c.toString());
+                            .setDescription("Description:\n" + c.toString()
+                                    + LINE_BREAK + "Syntax:\n" + c.syntax());
                     event.getChannel().sendMessage(emb.build()).queue();
                 }
             }
         }
+
+        @Override
+        public String toString() {
+            return "Shows help for specified commands";
+        }
+
+        @Override
+        String syntax() {
+            return "<prefix>help <command>";
+        }
+    },
+    LIST("(help|list)") {
+        @Override
+        void run(AkanBot bot, MessageReceivedEvent event, Matcher matcher) {
+            StringBuilder out = new StringBuilder();
+            EmbedBuilder emb = new EmbedBuilder();
+            int counter = 1;
+            for (CMD c : CMD.values()) {
+                out.append(c.name().toLowerCase());
+                if (counter != CMD.values().length) {
+                    if (counter % 2 == 0) {
+                        out.append(LINE_BREAK);
+                    } else {
+                        out.append(", ");
+                    }
+                }
+                counter++;
+            }
+            out.append(LINE_BREAK + LINE_BREAK + "See more with ").append(bot.getPrefix()).append("help <command>");
+            emb.setTitle("Commands:")
+                    .setThumbnail(event.getGuild().getIconUrl())
+                    .setDescription(out.toString());
+            event.getChannel().sendMessage(emb.build()).queue();
+        }
+
+        @Override
+        String syntax() {
+            return "<prefix>help or <prefix>list";
+        }
+
+        @Override
+        public String toString() {
+            return "list all commands";
+        }
     };
-    
+
+    private static final String LINE_BREAK = "\n";
+    private static final String ACTIVITY_TYPE_REGEX = "playing|watching|listening|streaming";
     private static final String TAGS_REGEX = "[\\p{L}\\d" + CMD.SPECIAL_CHARS + "]+";
+    private static final String STATUS_REGEX = "[\\p{L}_$&+,:;=?@#'<>.^*()%!\\- 0-9\\/]+";
     private static final String REP_REGEX = "[A-Za-z0-9 ]+";
     private static final String SPECIAL_CHARS = "_$&+,:;=?@#'<>.^*()%!-";
     private static final String INT_REGEX = "\\d+";
@@ -227,6 +348,7 @@ public enum CMD {
     }
 
     abstract void run(AkanBot bot, MessageReceivedEvent event, Matcher matcher);
+    abstract String syntax();
 
     private static boolean userIsOwner(final User user) {
         for (String id : CMD.OWNERS) {

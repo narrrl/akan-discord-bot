@@ -71,7 +71,7 @@ public class AkanBot extends ListenerAdapter {
         Message msg = event.getMessage();
         if (msg.getContentRaw().startsWith(this.prefix)) {
             try {
-                CMD.execute(this, event, msg.getContentRaw().replace(this.prefix, ""));
+                CMD.execute(this, event, msg.getContentRaw().substring(this.prefix.length()));
             } catch (IllegalArgumentException e) {
                 event.getChannel().sendMessage(e.getMessage()).queue();
             }
