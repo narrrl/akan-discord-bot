@@ -12,8 +12,12 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Random;
 
-public class Requests {
-    public static GelbooruImage[] GelbooruRequest(final String url, final int amount) {
+public final class Requests {
+    /**
+     * Don't instantiate
+     */
+    private Requests() { }
+    public static GelbooruImage[] gelbooruRequest(final String url, final int amount) {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder xmlBuilder;
         try {
@@ -39,7 +43,7 @@ public class Requests {
             images[x].setPreviewUrl(nodeList.item(i).getAttributes().getNamedItem("preview_url").getNodeValue());
             images[x].setSource(nodeList.item(i).getAttributes().getNamedItem("source").getNodeValue());
             images[x].setTags(nodeList.item(i).getAttributes().getNamedItem("tags").getNodeValue()
-                    .split(" ",-1));
+                    .split(" ", -1));
             images[x].setId(nodeList.item(i).getAttributes().getNamedItem("id").getNodeValue());
         }
         return images;

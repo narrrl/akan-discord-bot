@@ -46,8 +46,8 @@ public enum CMD {
             long time = System.currentTimeMillis();
             channel.sendMessage("Pong!")
                     .queue(response -> response
-                            .editMessageFormat("Pong: %d ms <a:loading:529887640472911922>"
-                                    , System.currentTimeMillis() - time).queue());
+                            .editMessageFormat("Pong: %d ms <a:loading:529887640472911922>",
+                                    System.currentTimeMillis() - time).queue());
         }
 
         @Override

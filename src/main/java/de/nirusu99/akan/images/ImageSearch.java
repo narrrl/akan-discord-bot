@@ -21,6 +21,6 @@ public final class ImageSearch {
         String url = "https://gelbooru.com/index.php?page=dapi&s=post&q=index"
                 + "&pid=" + (page - 1)
                 + "&tags=" + tag.toString();
-        return Requests.GelbooruRequest(url, amount);
+        return Requests.gelbooruRequest(url, amount);
     }
 }
