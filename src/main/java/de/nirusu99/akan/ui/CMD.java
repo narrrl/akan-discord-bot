@@ -8,7 +8,6 @@ import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -30,6 +29,7 @@ public enum CMD {
         void run(final AkanBot bot, final MessageReceivedEvent event, final Matcher matcher) {
             if (CMD.userIsOwner(event.getAuthor())) {
                 event.getChannel().sendMessage("bai bai!").queue();
+                event.getChannel().sendMessage("<:megu:666743067755151360>").complete();
                 System.exit(0);
             } else {
                 throw new IllegalArgumentException("Only bot owner can do that!");
@@ -46,7 +46,8 @@ public enum CMD {
             long time = System.currentTimeMillis();
             channel.sendMessage("Pong!")
                     .queue(response -> response
-                            .editMessageFormat("Pong: %d ms", System.currentTimeMillis() - time).queue());
+                            .editMessageFormat("Pong: %d ms <a:loading:529887640472911922>"
+                                    , System.currentTimeMillis() - time).queue());
         }
 
         @Override
@@ -83,6 +84,10 @@ public enum CMD {
     SEARCH("search (" + CMD.TAGS_REGEX + ") (" + CMD.INT_REGEX + ") (" + CMD.INT_REGEX + ")") {
         @Override
         void run(AkanBot bot, MessageReceivedEvent event, Matcher matcher) {
+            if (event.isFromGuild() && !event.getTextChannel().isNSFW()) {
+                event.getChannel().sendMessage("Not here, senpai <a:blushDS:639619041920548884>").queue();
+                return;
+            }
             int amount = Integer.parseInt(matcher.group(2));
             int page = Integer.parseInt(matcher.group(3));
             if (amount > 5) {
@@ -134,6 +139,60 @@ public enum CMD {
         }
     },
     /**
+     * under constuction. Converts input to emotes.
+     */
+    REP("rep (" + CMD.REP_REGEX + ")") {
+        @Override
+        void run(AkanBot bot, MessageReceivedEvent event, Matcher matcher) {
+            char[] chars = matcher.group(1).toCharArray();
+            String[] output = new String[chars.length];
+            for (int i = 0; i < output.length; i++) {
+                switch (chars[i]) {
+                    case '0':
+                        output[i] = ":zero:";
+                        break;
+                    case '1':
+                        output[i] = ":one:";
+                        break;
+                    case '2':
+                        output[i] = ":two:";
+                        break;
+                    case '3':
+                        output[i] = ":three:";
+                        break;
+                    case '4':
+                        output[i] = ":four:";
+                        break;
+                    case '5':
+                        output[i] = ":five:";
+                        break;
+                    case '6':
+                        output[i] = ":six:";
+                        break;
+                    case '7':
+                        output[i] = ":seven:";
+                        break;
+                    case '8':
+                        output[i] = ":eight:";
+                        break;
+                    case '9':
+                        output[i] = ":nine:";
+                        break;
+                    case ' ':
+                        output[i] = " ";
+                        break;
+                    default:
+                        output[i] = ":regional_indicator_" + chars[i] + ":";
+                }
+            }
+            StringBuilder out = new StringBuilder();
+            for (String str : output) {
+                out.append(str);
+            }
+            event.getChannel().sendMessage(out.toString().replace(" ", "\n")).queue();
+        }
+    },
+    /**
      * Help command that checks if a command with than name exists and then sends its toString to the channel.
      * Just a temporary help command.
      */
@@ -154,6 +213,7 @@ public enum CMD {
     };
     
     private static final String TAGS_REGEX = "[\\p{L}\\d" + CMD.SPECIAL_CHARS + "]+";
+    private static final String REP_REGEX = "[A-Za-z0-9 ]+";
     private static final String SPECIAL_CHARS = "_$&+,:;=?@#'<>.^*()%!-";
     private static final String INT_REGEX = "\\d+";
     private static final String NAMING_REGEX = "[\\p{L}_$&+,:;=?@#'<>.^*()%!-]+";

@@ -14,7 +14,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 public class AkanBot extends ListenerAdapter {
-    private static final String DEFAULT_PREFIX = "akan!";
+    private static final String DEFAULT_PREFIX = "a!";
     private final JDABuilder jda;
     private String prefix = AkanBot.DEFAULT_PREFIX;
 
