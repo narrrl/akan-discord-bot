@@ -144,6 +144,7 @@ public enum CMD {
     REP("rep (" + CMD.REP_REGEX + ")") {
         @Override
         void run(AkanBot bot, MessageReceivedEvent event, Matcher matcher) {
+            event.getMessage().delete().queue();
             char[] chars = matcher.group(1).toCharArray();
             String[] output = new String[chars.length];
             for (int i = 0; i < output.length; i++) {
