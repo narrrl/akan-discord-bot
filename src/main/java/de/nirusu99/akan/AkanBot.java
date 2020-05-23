@@ -1,6 +1,12 @@
 package de.nirusu99.akan;
 
 import de.nirusu99.akan.ui.CMD;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.file.Paths;
+import javax.security.auth.login.LoginException;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
@@ -8,33 +14,32 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
-import javax.security.auth.login.LoginException;
-import java.io.*;
-import java.net.URISyntaxException;
-import java.nio.file.Paths;
-
 public class AkanBot extends ListenerAdapter {
-    public static final String DEFAULT_PREFIX = "akan!";
-    private static final String TOKEN = "token";
+    private static final String DEFAULT_PREFIX = "akan!";
     private final JDABuilder jda;
     private String prefix = AkanBot.DEFAULT_PREFIX;
 
     AkanBot(final String token) throws LoginException, InterruptedException {
         this.jda = JDABuilder.createDefault(token);
-        jda.addEventListeners(this).setActivity(Activity.playing("Hewwo Senpai")).build().awaitReady();
+        jda.addEventListeners(this)
+                .setActivity(Activity.playing("Hewwo Senpai")).build().awaitReady();
         jda.setAutoReconnect(true)
                 .setStatus(OnlineStatus.ONLINE);
     }
 
-    public static void main(String[] args){
+    /**
+     * Starts the bot
+     * @param args ---
+     */
+    public static void main(String[] args) {
         try {
             AkanBot.start();
-        } catch (LoginException | URISyntaxException | InterruptedException e) {
+        } catch (LoginException | InterruptedException e) {
             System.err.println(e.getMessage());
         }
     }
 
-    public static void start() throws LoginException, URISyntaxException, InterruptedException {
+    public static void start() throws LoginException, InterruptedException {
         File file = new File(Paths.get("").toUri().getPath()
                 + "\\src\\main\\resources\\de\\nirusu99\\akan\\token");
         final String token;
@@ -62,12 +67,11 @@ public class AkanBot extends ListenerAdapter {
     }
 
     @Override
-    public void onMessageReceived(MessageReceivedEvent event)
-    {
+    public void onMessageReceived(MessageReceivedEvent event) {
         Message msg = event.getMessage();
         if (msg.getContentRaw().startsWith(this.prefix)) {
             try {
-                CMD.execute(this, event, msg.getContentRaw().replace(this.prefix,""));
+                CMD.execute(this, event, msg.getContentRaw().replace(this.prefix, ""));
             } catch (IllegalArgumentException e) {
                 event.getChannel().sendMessage(e.getMessage()).queue();
             }

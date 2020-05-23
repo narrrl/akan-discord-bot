@@ -7,32 +7,45 @@ import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * This is the command class where all commands get executed and all the user input gets parsed.
+ *
+ * @author Nils Pukropp
+ * @version 1.0-SNAPSHOT
+ */
 public enum CMD {
+    /**
+     * Shutdown the bot, didn't find a better way just yet.
+     * Checks if the user is a owner {@link de.nirusu99.akan.ui.CMD#OWNERS}.
+     */
     EXIT("exit") {
         @Override
         void run(final AkanBot bot, final MessageReceivedEvent event, final Matcher matcher) {
             if (CMD.userIsOwner(event.getAuthor())) {
                 event.getChannel().sendMessage("bai bai!").queue();
                 System.exit(0);
+            } else {
+                throw new IllegalArgumentException("Only bot owner can do that!");
             }
         }
     },
+    /**
+     * Pings the bot and sends a not so accurate ping, but it will do its job
+     */
     PING("ping") {
         @Override
         void run(AkanBot bot, MessageReceivedEvent event, Matcher matcher) {
             MessageChannel channel = event.getChannel();
             long time = System.currentTimeMillis();
             channel.sendMessage("Pong!")
-                    .queue(response -> {
-                        response.editMessageFormat("Pong: %d ms", System.currentTimeMillis() - time).queue();
-                    });
+                    .queue(response -> response
+                            .editMessageFormat("Pong: %d ms", System.currentTimeMillis() - time).queue());
         }
 
         @Override
@@ -40,6 +53,10 @@ public enum CMD {
             return "Pings the bot";
         }
     },
+    /**
+     * Changes the bot prefix with {@link de.nirusu99.akan.AkanBot#setPrefix(String)}
+     * Checks if the user is a owner {@link de.nirusu99.akan.ui.CMD#OWNERS}.
+     */
     PREFIX("prefix (" + CMD.PREFIX_REGEX + ")") {
         @Override
         void run(AkanBot bot, MessageReceivedEvent event, Matcher matcher) {
@@ -49,6 +66,8 @@ public enum CMD {
                 event.getChannel()
                         .sendMessage("Prefix was set to " + newPrefix + " <:remV:639621688887083018>")
                         .queue();
+            } else {
+                throw new IllegalArgumentException("Only bot owner can do that!");
             }
         }
 
@@ -57,13 +76,25 @@ public enum CMD {
             return "Changes the prefix of the bot. Only bot owner can do that";
         }
     },
+    /**
+     *
+     */
     SEARCH("search (" + CMD.NAMING_REGEX + ") (" + CMD.INT_REGEX + ") (" + CMD.INT_REGEX + ")") {
         @Override
         void run(AkanBot bot, MessageReceivedEvent event, Matcher matcher) {
             int amount = Integer.parseInt(matcher.group(2));
             int page = Integer.parseInt(matcher.group(3));
-            List<String> tags = Arrays.asList(matcher.group(1).split("\\+",-1));
-            ArrayList<String> images = ImageSearch.getImagesFor(tags,amount, page);
+            if (amount > 5) {
+                throw new IllegalArgumentException("You can't search for more then 5 pics");
+            }
+            if (amount < 1) {
+                throw new IllegalArgumentException("You can't search for less then 1 pic");
+            }
+            if (page < 1) {
+                throw new IllegalArgumentException("You can't search for pages less then 1");
+            }
+            List<String> tags = Arrays.asList(matcher.group(1).split("\\+", -1));
+            ArrayList<String> images = ImageSearch.getImagesFor(tags, amount, page);
             if (images.isEmpty()) {
                 StringBuilder out = new StringBuilder();
                 tags.forEach(out::append);
@@ -80,10 +111,13 @@ public enum CMD {
 
         @Override
         public String toString() {
-            return "Searches images by tags on Gelbooru. Tags are separated by a +\n" +
-                    "Syntax is <prefix>search <tags> <amount> <page>";
+            return "Searches images by tags on Gelbooru. Tags are separated by a +\n"
+                    + "Syntax is <prefix>search <tags> <amount> <page>";
         }
     },
+    /**
+     * Sends the invite link for the bot
+     */
     INVITE("invite") {
         @Override
         void run(AkanBot bot, MessageReceivedEvent event, Matcher matcher) {
@@ -96,6 +130,10 @@ public enum CMD {
             return "Sends the invite-link for the bot";
         }
     },
+    /**
+     * Help command that checks if a command with than name exists and then sends its toString to the channel.
+     * Just a temporary help command.
+     */
     HELP("help (" + CMD.NAMING_REGEX + ")") {
         @Override
         void run(AkanBot bot, MessageReceivedEvent event, Matcher matcher) {
@@ -112,11 +150,10 @@ public enum CMD {
         }
     };
     
-    private static final String EMPTY_STRING = "";
     private static final String INT_REGEX = "[0-9]+";
     private static final String NAMING_REGEX = "[\\p{L}_$&+,:;=?@#'<>.^*()%!-]+";
     private static final String PREFIX_REGEX = "[\\p{L}_$&+,:;=?@#'<>.^*()%!-]+";
-    private static String[] OWNERS = {"208979474988007425","244607816587935746"};
+    private static final String[] OWNERS = {"208979474988007425", "244607816587935746"};
     private final Pattern pattern;
 
     CMD(final String pattern) {
@@ -135,7 +172,9 @@ public enum CMD {
     }
 
     public static void execute(final AkanBot bot, final MessageReceivedEvent event, final String input) {
-        if (event.getAuthor().isBot()) return;
+        if (event.getAuthor().isBot()) {
+            return;
+        }
         for (final CMD i : values()) {
             final Matcher matcher = i.pattern.matcher(input);
             if (matcher.matches()) {
