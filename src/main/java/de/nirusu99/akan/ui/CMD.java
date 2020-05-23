@@ -145,7 +145,7 @@ public enum CMD {
         @Override
         void run(AkanBot bot, MessageReceivedEvent event, Matcher matcher) {
             event.getMessage().delete().queue();
-            char[] chars = matcher.group(1).toCharArray();
+            char[] chars = matcher.group(1).toLowerCase().toCharArray();
             String[] output = new String[chars.length];
             for (int i = 0; i < output.length; i++) {
                 switch (chars[i]) {
