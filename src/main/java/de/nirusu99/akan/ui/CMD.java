@@ -1,6 +1,7 @@
 package de.nirusu99.akan.ui;
 
 import de.nirusu99.akan.AkanBot;
+import de.nirusu99.akan.images.GelbooruImage;
 import de.nirusu99.akan.images.ImageSearch;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageChannel;
@@ -94,15 +95,17 @@ public enum CMD {
                 throw new IllegalArgumentException("You can't search for pages less then 1");
             }
             List<String> tags = Arrays.asList(matcher.group(1).split("\\+", -1));
-            ArrayList<String> images = ImageSearch.getImagesFor(tags, amount, page);
-            if (images.isEmpty()) {
+            GelbooruImage[] images = ImageSearch.getImagesFor(tags, amount, page);
+            if (images.length == 0) {
                 StringBuilder out = new StringBuilder();
                 tags.forEach(out::append);
                 event.getChannel().sendMessage("no pictures found for tag " + out.toString()).queue();
             } else {
                 EmbedBuilder emb = new EmbedBuilder();
-                for (String img : images) {
-                    emb.setImage(img);
+                for (GelbooruImage img : images) {
+                    emb.setImage(img.getUrl())
+                            .setFooter(img.getSource())
+                            .setTitle(img.getId(), img.getPostUrl());
                     event.getChannel().sendMessage(emb.build()).queue();
                 }
             }
