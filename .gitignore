@@ -32,7 +32,6 @@ repo/
 .classpath
 .project
 .settings
-.checkstyle
 bin/
 target/
 
