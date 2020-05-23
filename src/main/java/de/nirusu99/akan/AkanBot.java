@@ -5,7 +5,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Paths;
 import javax.security.auth.login.LoginException;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
@@ -40,11 +39,12 @@ public class AkanBot extends ListenerAdapter {
     }
 
     public static void start() throws LoginException, InterruptedException {
-        File file = new File(Paths.get("").toUri().getPath()
-                + "\\src\\main\\resources\\de\\nirusu99\\akan\\token");
+        String filePath = new File("").getAbsolutePath();
         final String token;
         try {
-            token = new BufferedReader(new FileReader(file)).readLine();
+            token = new BufferedReader(new FileReader(new File(filePath.concat("/build/resources/main/"
+                    + "de/nirusu99/akan/token"))))
+                    .readLine();
         } catch (IOException e) {
             throw new IllegalArgumentException(e.getMessage());
         }
