@@ -79,7 +79,7 @@ public class AkanBot extends ListenerAdapter {
         return prefix;
     }
 
-    public JDABuilder getJda() {
+    public JDABuilder getJDA() {
         return jda;
     }
 

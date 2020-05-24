@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -350,6 +351,9 @@ public enum CMD {
             return "reacts to your message when it gets executed";
         }
     },
+    /**
+     * Resets the avatar for some reason?
+     */
     SETAVATAR("setavatar") {
         @Override
         void run(AkanBot bot, MessageReceivedEvent event, Matcher matcher) {
@@ -366,7 +370,7 @@ public enum CMD {
                     if (!file.delete()) System.err.println("couldn't delete picture!");
                     throw new IllegalArgumentException(e.getMessage());
                 }
-                event.getJDA().getSelfUser().getManager().setAvatar(icon).complete();
+                event.getJDA().getSelfUser().getManager().setAvatar(icon).queue();
                 event.getChannel().sendMessage("updated avatar!").complete();
                 if (!file.delete()) System.err.println("couldn't delete picture!");
             } else {
