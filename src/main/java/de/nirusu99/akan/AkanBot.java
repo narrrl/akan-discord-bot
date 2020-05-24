@@ -1,7 +1,6 @@
 package de.nirusu99.akan;
 
 import de.nirusu99.akan.ui.CMD;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -12,14 +11,18 @@ import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 public class AkanBot extends ListenerAdapter {
     private static final String DEFAULT_PREFIX = "a!";
     private final JDABuilder jda;
-    private String prefix = AkanBot.DEFAULT_PREFIX;
+    private String prefix;
     private boolean checkMark;
 
-    AkanBot(final String token) throws LoginException, InterruptedException {
+    AkanBot(final String token, final String prefix) throws LoginException, InterruptedException {
+        this.prefix = prefix;
         this.jda = JDABuilder.createDefault(token);
         jda.addEventListeners(this)
                 .setActivity(Activity.playing("Hewwo Senpai")).build().awaitReady();
@@ -41,19 +44,23 @@ public class AkanBot extends ListenerAdapter {
     }
 
     public static void start() throws LoginException, InterruptedException {
-        String filePath = new File("").getAbsolutePath();
+        File file = new File(new File("").getAbsolutePath().concat("/build/resources/main/"
+                + "de/nirusu99/akan/config.json"));
         final String token;
+        final String prefix;
+        JSONObject obj = new JSONObject();
         try {
-            token = new BufferedReader(new FileReader(new File(filePath.concat("/build/resources/main/"
-                    + "de/nirusu99/akan/token"))))
-                    .readLine();
-        } catch (IOException e) {
+            JSONParser parser = new JSONParser();
+            obj = (JSONObject) parser.parse(new FileReader(file));
+        } catch (IOException | ParseException e) {
             throw new IllegalArgumentException(e.getMessage());
         }
+        token = (String) obj.get("token");
+        prefix = (String) obj.get("prefix");
         if (token == null) {
             throw new IllegalArgumentException("token is empty!");
         }
-        new AkanBot(token);
+        new AkanBot(token, prefix);
     }
 
     public boolean isCheckMark() {
