@@ -2,7 +2,11 @@ package de.nirusu99.akan.utils;
 
 public class EmoteConverter {
     public static String convertRegionalIndicators(final String input) {
-        char[] chars = input.toLowerCase().toCharArray();
+        char[] chars = input.toLowerCase().replace("ä","ae")
+                .replace("ö","oe")
+                .replace("ü","ue")
+                .replace("ß","ss")
+                .toCharArray();
         String[] output = new String[chars.length];
         for (int i = 0; i < output.length; i++) {
             switch (chars[i]) {

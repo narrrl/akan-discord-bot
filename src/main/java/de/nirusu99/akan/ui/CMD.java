@@ -479,6 +479,7 @@ public enum CMD {
         for (final CMD i : values()) {
             final Matcher matcher = i.pattern.matcher(input);
             if (matcher.matches()) {
+                bot.getLog().addLog(event, i);
                 i.run(bot, event, matcher);
                 if (bot.isCheckMark()) {
                     event.getMessage().addReaction("ayayayhyper:567486942086692872").queue();

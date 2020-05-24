@@ -1,8 +1,8 @@
 package de.nirusu99.akan;
 
 import de.nirusu99.akan.core.Config;
+import de.nirusu99.akan.core.Logger;
 import de.nirusu99.akan.ui.CMD;
-import java.io.File;
 import javax.security.auth.login.LoginException;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
@@ -14,10 +14,12 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 public class AkanBot extends ListenerAdapter {
     private static final String DEFAULT_PREFIX = "a!";
     private final Config conf;
+    private final Logger log;
     private String prefix;
 
     AkanBot() throws LoginException, InterruptedException {
         conf = new Config();
+        log = new Logger();
         this.prefix = conf.getPrefix();
         JDABuilder jda = JDABuilder.createDefault(conf.getToken());
         jda.addEventListeners(this)
@@ -56,6 +58,10 @@ public class AkanBot extends ListenerAdapter {
 
     public String getPrefix() {
         return prefix;
+    }
+
+    public Logger getLog() {
+        return log;
     }
 
     @Override

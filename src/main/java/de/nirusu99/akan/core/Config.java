@@ -8,8 +8,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 
 public final class Config {
     final JSONObject obj;
