@@ -43,6 +43,9 @@ public class Logger {
         }
         obj.put(dtf.format(now),array);
         try {
+            if (!file.canWrite()) {
+                System.err.println("Logger: Couldn't writer log.json");
+            }
             writer = new FileWriter(file);
             writer.write(obj.toJSONString());
             writer.flush();
