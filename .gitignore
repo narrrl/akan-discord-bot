@@ -90,3 +90,6 @@ Thumbs.db
 *.synctex(busy)
 *.tdo
 *.toc
+
+#bot-files
+config.json
