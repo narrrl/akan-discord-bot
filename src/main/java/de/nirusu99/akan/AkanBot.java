@@ -17,13 +17,12 @@ import org.json.simple.parser.ParseException;
 
 public class AkanBot extends ListenerAdapter {
     private static final String DEFAULT_PREFIX = "a!";
-    private final JDABuilder jda;
     private String prefix;
     private boolean checkMark;
 
     AkanBot(final String token, final String prefix) throws LoginException, InterruptedException {
         this.prefix = prefix;
-        this.jda = JDABuilder.createDefault(token);
+        JDABuilder jda = JDABuilder.createDefault(token);
         jda.addEventListeners(this)
                 .setActivity(Activity.playing("Hewwo Senpai")).build().awaitReady();
         jda.setAutoReconnect(true)
@@ -48,7 +47,7 @@ public class AkanBot extends ListenerAdapter {
                 + "de/nirusu99/akan/config.json"));
         final String token;
         final String prefix;
-        JSONObject obj = new JSONObject();
+        JSONObject obj;
         try {
             JSONParser parser = new JSONParser();
             obj = (JSONObject) parser.parse(new FileReader(file));
@@ -77,10 +76,6 @@ public class AkanBot extends ListenerAdapter {
 
     public String getPrefix() {
         return prefix;
-    }
-
-    public JDABuilder getJDA() {
-        return jda;
     }
 
     @Override

@@ -1,8 +1,10 @@
 package de.nirusu99.akan.ui;
 
 import de.nirusu99.akan.AkanBot;
-import de.nirusu99.akan.images.GelbooruImage;
+import de.nirusu99.akan.images.Image;
 import de.nirusu99.akan.images.ImageSearch;
+import de.nirusu99.akan.utils.EmoteConverter;
+import de.nirusu99.akan.utils.Host;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -11,7 +13,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -98,15 +99,19 @@ public enum CMD {
     /**
      *
      */
-    SEARCH("search (" + CMD.TAGS_REGEX + ") (" + CMD.INT_REGEX + ") (" + CMD.INT_REGEX + ")") {
+    SEARCH("search ("+ Host.HOSTS_REGEX +") (" + CMD.TAGS_REGEX + ") ?("
+            + CMD.INT_REGEX + ")? ?(" + CMD.INT_REGEX + ")?") {
         @Override
         void run(AkanBot bot, MessageReceivedEvent event, Matcher matcher) {
-            if (event.isFromGuild() && !event.getTextChannel().isNSFW()) {
-                event.getChannel().sendMessage("Not here, senpai <a:blushDS:639619041920548884>").queue();
-                return;
+            int amount;
+            int page;
+            if (matcher.group(3) != null && matcher.group(4) != null) {
+                amount = Integer.parseInt(matcher.group(3));
+                page = Integer.parseInt(matcher.group(4));
+            } else {
+                amount = 1;
+                page = 1;
             }
-            int amount = Integer.parseInt(matcher.group(2));
-            int page = Integer.parseInt(matcher.group(3));
             if (amount > 5) {
                 throw new IllegalArgumentException("You can't search for more then 5 pics");
             }
@@ -116,15 +121,15 @@ public enum CMD {
             if (page < 1) {
                 throw new IllegalArgumentException("You can't search for pages less then 1");
             }
-            List<String> tags = Arrays.asList(matcher.group(1).split("\\+", -1));
-            GelbooruImage[] images = ImageSearch.getImagesFor(tags, amount, page);
+            List<String> tags = Arrays.asList(matcher.group(2).split("\\+", -1));
+            Image[] images = ImageSearch.searchFor(tags, amount, page, Host.getHost(matcher.group(1)));
             if (images.length == 0) {
                 StringBuilder out = new StringBuilder();
                 tags.forEach(out::append);
                 event.getChannel().sendMessage("no pictures found for tag " + out.toString()).queue();
             } else {
-                EmbedBuilder emb = new EmbedBuilder();
-                for (GelbooruImage img : images) {
+                EmbedBuilder emb;
+                for (Image img : images) {
                     emb = new EmbedBuilder();
                     if (!img.isVideo()) {
                         emb.setImage(img.getUrl())
@@ -141,12 +146,13 @@ public enum CMD {
 
         @Override
         String syntax() {
-            return "<prefix>search <tag+tag+tag...> <amount> <page>";
+            return "<prefix>search <gelbooru|safebooru> <tag+tag+tag...> <amount> <page>\n"
+                    +"<prefix>search <gelbooru|safebooru> <tag+tag+tag...>";
         }
 
         @Override
         public String toString() {
-            return "Searches images by tags on Gelbooru. Tags are separated by a +";
+            return "Searches images by tags on Gelbooru";
         }
     },
     /**
@@ -176,52 +182,9 @@ public enum CMD {
         @Override
         void run(AkanBot bot, MessageReceivedEvent event, Matcher matcher) {
             event.getMessage().delete().queue();
-            char[] chars = matcher.group(1).toLowerCase().toCharArray();
-            String[] output = new String[chars.length];
-            for (int i = 0; i < output.length; i++) {
-                switch (chars[i]) {
-                    case '0':
-                        output[i] = ":zero:";
-                        break;
-                    case '1':
-                        output[i] = ":one:";
-                        break;
-                    case '2':
-                        output[i] = ":two:";
-                        break;
-                    case '3':
-                        output[i] = ":three:";
-                        break;
-                    case '4':
-                        output[i] = ":four:";
-                        break;
-                    case '5':
-                        output[i] = ":five:";
-                        break;
-                    case '6':
-                        output[i] = ":six:";
-                        break;
-                    case '7':
-                        output[i] = ":seven:";
-                        break;
-                    case '8':
-                        output[i] = ":eight:";
-                        break;
-                    case '9':
-                        output[i] = ":nine:";
-                        break;
-                    case ' ':
-                        output[i] = " ";
-                        break;
-                    default:
-                        output[i] = ":regional_indicator_" + chars[i] + ":";
-                }
+            for (String out : EmoteConverter.convertRegionalIndicators(matcher.group(1)).split(" ", -1)) {
+                event.getChannel().sendMessage(out).queue();
             }
-            StringBuilder out = new StringBuilder();
-            for (String str : output) {
-                out.append(str);
-            }
-            event.getChannel().sendMessage(out.toString().replace(" ", "\n")).queue();
         }
 
         @Override
