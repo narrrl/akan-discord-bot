@@ -36,6 +36,10 @@ public class GelbooruImage {
         this.id = id;
     }
 
+    public boolean isVideo() {
+        return this.url.endsWith(".webm") || this.url.endsWith(".mp4");
+    }
+
     public String getPreviewUrl() {
         return previewUrl;
     }

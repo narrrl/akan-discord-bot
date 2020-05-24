@@ -125,10 +125,15 @@ public enum CMD {
             } else {
                 EmbedBuilder emb = new EmbedBuilder();
                 for (GelbooruImage img : images) {
-                    emb.setImage(img.getUrl())
-                            .setFooter(img.getSource())
-                            .setTitle(img.getId(), img.getPostUrl());
-                    event.getChannel().sendMessage(emb.build()).queue();
+                    emb = new EmbedBuilder();
+                    if (!img.isVideo()) {
+                        emb.setImage(img.getUrl())
+                                .setFooter(img.getSource())
+                                .setTitle(img.getId(), img.getPostUrl());
+                        event.getChannel().sendMessage(emb.build()).queue();
+                    } else {
+                        event.getChannel().sendMessage(img.getUrl()).complete();
+                    }
                 }
             }
 
