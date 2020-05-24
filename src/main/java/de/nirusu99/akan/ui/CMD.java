@@ -140,8 +140,8 @@ public enum CMD {
                 throw new IllegalArgumentException("You can't search for pages less then 1");
             }
             List<String> tags = Arrays.asList(matcher.group(2).split("\\+", -1));
-            Image[] images = ImageSearch.searchFor(tags, amount, page, Host.getHost(matcher.group(1)));
-            if (images.length == 0) {
+            List<Image> images = ImageSearch.searchFor(tags, amount, page, Host.getHost(matcher.group(1)));
+            if (images.size() == 0) {
                 StringBuilder out = new StringBuilder();
                 tags.forEach(out::append);
                 event.getChannel().sendMessage("no pictures found for tag " + out.toString()).queue();

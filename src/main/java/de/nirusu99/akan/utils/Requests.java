@@ -10,6 +10,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public final class Requests {
@@ -17,7 +19,7 @@ public final class Requests {
      * Don't instantiate
      */
     private Requests() { }
-    public static Image[] request(final String url, final int amount, final Host host) {
+    public static List<Image> request(final String url, final int amount, final Host host) {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder xmlBuilder;
         try {
@@ -33,10 +35,10 @@ public final class Requests {
             throw new IllegalArgumentException(e.getMessage());
         }
         NodeList nodeList = doc.getElementsByTagName("post");
-        Image[] images = new Image[amount];
+        List<Image> images = new ArrayList<>();
         int max = nodeList.getLength();
         Random rand = new Random();
-        for (int x = 0; x < amount; x++) {
+        for (int x = 1; x <= amount && x <= max; x++) {
             int i = rand.nextInt(max);
             String fileUrl = nodeList.item(i).getAttributes().getNamedItem("file_url").getNodeValue();
             String previewUrl = nodeList.item(i).getAttributes().getNamedItem("preview_url").getNodeValue();
@@ -44,7 +46,7 @@ public final class Requests {
             String[] tags = nodeList.item(i).getAttributes().getNamedItem("tags").getNodeValue()
                     .split(" ", -1);
             String id = nodeList.item(i).getAttributes().getNamedItem("id").getNodeValue();
-            images[x] = new Image(fileUrl, previewUrl, tags, source, id, host);
+            images.add(new Image(fileUrl, previewUrl, tags, source, id, host));
         }
         return images;
     }

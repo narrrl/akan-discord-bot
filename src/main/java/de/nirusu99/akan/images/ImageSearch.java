@@ -11,7 +11,7 @@ public final class ImageSearch {
      */
     private ImageSearch() { };
 
-    public static Image[] searchFor(final List<String> tags, final int amount, final int page, final Host host) {
+    public static List<Image> searchFor(final List<String> tags, final int amount, final int page, final Host host) {
         StringBuilder tag = new StringBuilder();
         tags.forEach(str -> {
             tag.append(str.toLowerCase().trim());
