@@ -92,4 +92,4 @@ Thumbs.db
 *.toc
 
 #bot-files
-config.json
+src/main/resources/config.json

@@ -37,7 +37,7 @@ dependencies {
 sourceSets {
     main {
         resources {
-            include '**/*.json'
+            exclude '**/*.json'
         }
     }
 }
