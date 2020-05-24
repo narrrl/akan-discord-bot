@@ -383,8 +383,30 @@ public enum CMD {
         public String toString() {
             return "changes the avatar of the bot. You have to attach a image";
         }
+    },
+    AVATAR("avatar <@!(" + CMD.USER_REGEX + ")>") {
+        @Override
+        void run(AkanBot bot, MessageReceivedEvent event, Matcher matcher) {
+            Member user = event.getGuild().getMemberById(matcher.group(1));
+            if (user == null) throw new IllegalArgumentException("couldn't find user");
+            EmbedBuilder emb = new EmbedBuilder();
+            emb.setTitle(user.getUser().getAsTag(),user.getUser().getAvatarUrl())
+                    .setImage(user.getUser().getEffectiveAvatarUrl() + "?size=256");
+            event.getChannel().sendMessage(emb.build()).complete();
+        }
+
+        @Override
+        String syntax() {
+            return "<prefix>avatar <@User>";
+        }
+
+        @Override
+        public String toString() {
+            return "Gets the avatar of the specified user";
+        }
     };
 
+    private static final String USER_REGEX = "[0-9]+";
     private static final String LINE_BREAK = "\n";
     private static final String ACTIVITY_TYPE_REGEX = "playing|watching|listening|streaming";
     private static final String TAGS_REGEX = "[\\p{L}\\d" + CMD.SPECIAL_CHARS + "]+";
