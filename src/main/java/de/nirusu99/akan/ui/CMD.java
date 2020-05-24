@@ -43,6 +43,11 @@ public enum CMD {
         String syntax() {
             return "<prefix>exit";
         }
+
+        @Override
+        String gifHelpUrl() {
+            return null;
+        }
     },
     /**
      * Pings the bot and sends a not so accurate ping, but it will do its job
@@ -61,6 +66,11 @@ public enum CMD {
         @Override
         String syntax() {
             return "<prefix>ping";
+        }
+
+        @Override
+        String gifHelpUrl() {
+            return null;
         }
 
         @Override
@@ -89,6 +99,11 @@ public enum CMD {
         @Override
         String syntax() {
             return "<prefix>prefix <new prefix>";
+        }
+
+        @Override
+        String gifHelpUrl() {
+            return null;
         }
 
         @Override
@@ -153,6 +168,11 @@ public enum CMD {
         }
 
         @Override
+        String gifHelpUrl() {
+            return "https://media.giphy.com/media/KCwd6UCEPyDUuhje5R/giphy.gif";
+        }
+
+        @Override
         public String toString() {
             return "Searches images by tags on Gelbooru";
         }
@@ -170,6 +190,11 @@ public enum CMD {
         @Override
         String syntax() {
             return "<prefix>invite";
+        }
+
+        @Override
+        String gifHelpUrl() {
+            return null;
         }
 
         @Override
@@ -197,6 +222,11 @@ public enum CMD {
         @Override
         String syntax() {
             return "<prefix>rep <message>";
+        }
+
+        @Override
+        String gifHelpUrl() {
+            return null;
         }
     },
     /**
@@ -236,6 +266,11 @@ public enum CMD {
             return "<prefix>status (listening|playing|watching) <message>\n"
                     + "<prefix>status streaming <<message> <url>>";
         }
+
+        @Override
+        String gifHelpUrl() {
+            return null;
+        }
     },
     /**
      * Help command that checks if a command with than name exists and then sends its toString to the channel.
@@ -250,8 +285,9 @@ public enum CMD {
                 if (input.equals(c.name().toLowerCase())) {
                     emb.setTitle(c.name())
                             .setThumbnail(event.getGuild().getIconUrl())
-                            .setDescription("Description:\n" + c.toString()
-                                    + LINE_BREAK + "Syntax:\n" + c.syntax());
+                            .setDescription("**Description**:\n" + c.toString()
+                                    + LINE_BREAK + "**Syntax**:\n" + c.syntax())
+                            .setImage(c.gifHelpUrl());
                     event.getChannel().sendMessage(emb.build()).queue();
                 }
             }
@@ -265,6 +301,11 @@ public enum CMD {
         @Override
         String syntax() {
             return "<prefix>help <command>";
+        }
+
+        @Override
+        String gifHelpUrl() {
+            return null;
         }
     },
     LIST("(help|list)") {
@@ -297,6 +338,11 @@ public enum CMD {
         }
 
         @Override
+        String gifHelpUrl() {
+            return null;
+        }
+
+        @Override
         public String toString() {
             return "list all commands";
         }
@@ -314,6 +360,11 @@ public enum CMD {
         @Override
         String syntax() {
             return "<prefix>check <true|false>";
+        }
+
+        @Override
+        String gifHelpUrl() {
+            return null;
         }
 
         @Override
@@ -354,6 +405,11 @@ public enum CMD {
         }
 
         @Override
+        String gifHelpUrl() {
+            return null;
+        }
+
+        @Override
         public String toString() {
             return "changes the avatar of the bot. You have to attach a image";
         }
@@ -372,6 +428,11 @@ public enum CMD {
         @Override
         String syntax() {
             return "<prefix>avatar <@User>";
+        }
+
+        @Override
+        String gifHelpUrl() {
+            return null;
         }
 
         @Override
@@ -400,6 +461,7 @@ public enum CMD {
 
     abstract void run(AkanBot bot, MessageReceivedEvent event, Matcher matcher);
     abstract String syntax();
+    abstract String gifHelpUrl();
 
     private static boolean userIsOwner(final User user) {
         for (String id : CMD.OWNERS) {
