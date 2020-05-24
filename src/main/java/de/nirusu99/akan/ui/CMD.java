@@ -105,11 +105,14 @@ public enum CMD {
         void run(AkanBot bot, MessageReceivedEvent event, Matcher matcher) {
             int amount;
             int page;
-            if (matcher.group(3) != null && matcher.group(4) != null) {
+            if (matcher.group(3) != null) {
                 amount = Integer.parseInt(matcher.group(3));
-                page = Integer.parseInt(matcher.group(4));
             } else {
                 amount = 1;
+            }
+            if (matcher.group(4) != null) {
+                page = Integer.parseInt(matcher.group(4));
+            } else {
                 page = 1;
             }
             if (amount > 5) {
@@ -146,8 +149,7 @@ public enum CMD {
 
         @Override
         String syntax() {
-            return "<prefix>search <gelbooru|safebooru> <tag+tag+tag...> <amount> <page>\n"
-                    +"<prefix>search <gelbooru|safebooru> <tag+tag+tag...>";
+            return "<prefix>search <gelbooru|safebooru> <tag+tag+tag...> <amount> <page>";
         }
 
         @Override
