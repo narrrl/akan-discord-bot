@@ -91,6 +91,9 @@ Thumbs.db
 *.tdo
 *.toc
 
+#vscode
+.vscode
+
 #bot-files
 /config.json
 /log.json
