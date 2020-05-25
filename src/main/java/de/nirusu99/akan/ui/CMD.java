@@ -3,6 +3,7 @@ package de.nirusu99.akan.ui;
 import de.nirusu99.akan.AkanBot;
 import de.nirusu99.akan.images.Image;
 import de.nirusu99.akan.images.ImageSearch;
+import de.nirusu99.akan.utils.ActivitySetter;
 import de.nirusu99.akan.utils.EmoteConverter;
 import de.nirusu99.akan.utils.Host;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -11,7 +12,6 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -130,21 +130,14 @@ public enum CMD {
             } else {
                 page = 1;
             }
-            if (amount > 5) {
-                throw new IllegalArgumentException("You can't search for more then 5 pics");
+            if (amount > 5 || amount < 1 ||page < 1) {
+                throw new IllegalArgumentException("You can't search for more than 5 pics or less than 1 pic. " +
+                        "Pages start at 1");
             }
-            if (amount < 1) {
-                throw new IllegalArgumentException("You can't search for less then 1 pic");
-            }
-            if (page < 1) {
-                throw new IllegalArgumentException("You can't search for pages less then 1");
-            }
-            List<String> tags = Arrays.asList(matcher.group(2).split("\\+", -1));
+            String tags = matcher.group(2);
             List<Image> images = ImageSearch.searchFor(tags, amount, page, Host.getHost(matcher.group(1)));
             if (images.size() == 0) {
-                StringBuilder out = new StringBuilder();
-                tags.forEach(out::append);
-                event.getChannel().sendMessage("no pictures found for tag " + out.toString()).queue();
+                event.getChannel().sendMessage("no pictures found for tags " + tags).queue();
             } else {
                 EmbedBuilder emb;
                 for (Image img : images) {
@@ -208,7 +201,6 @@ public enum CMD {
     REP("rep (" + CMD.REP_REGEX + ")") {
         @Override
         void run(AkanBot bot, MessageReceivedEvent event, Matcher matcher) {
-            event.getMessage().delete().queue();
             for (String out : EmoteConverter.convertRegionalIndicators(matcher.group(1)).split(" ", -1)) {
                 event.getChannel().sendMessage(out).queue();
             }
@@ -232,32 +224,13 @@ public enum CMD {
     /**
      * Set the bot status
      */
-    STATUS("status (" + CMD.ACTIVITY_TYPE_REGEX + ") (" + CMD.STATUS_REGEX + ")") {
+    ACTIVITY("activity (" + CMD.ACTIVITY_TYPE_REGEX + ") (" + CMD.STATUS_REGEX + ")") {
         @Override
         void run(AkanBot bot, MessageReceivedEvent event, Matcher matcher) {
             if (CMD.userIsOwner(event.getAuthor())) {
-                switch (matcher.group(1)) {
-                    case "playing":
-                        event.getJDA().getPresence().setActivity(Activity.playing(matcher.group(2)));
-                        break;
-                    case "listening":
-                        event.getJDA().getPresence().setActivity(Activity.listening(matcher.group(2)));
-                        break;
-                    case "watching":
-                        event.getJDA().getPresence().setActivity(Activity.watching(matcher.group(2)));
-                        break;
-                    case "streaming":
-                        String[] str = matcher.group(2).split(" ", 2);
-                        if (str.length != 2) {
-                            throw new IllegalArgumentException("a!status streaming <streamtitle> <url>");
-                        }
-                        event.getJDA().getPresence().setActivity(Activity.streaming(str[0], str[1]));
-                        break;
-                    default:
-                        event.getChannel().sendMessage("invalid status type").queue();
-                }
+                ActivitySetter.set(matcher.group(1), matcher.group(2),event);
             } else {
-                event.getChannel().sendMessage("Only owner can set the bot status").queue();
+                event.getChannel().sendMessage("Only owner can set the activity").queue();
             }
         }
 
@@ -446,7 +419,7 @@ public enum CMD {
     private static final String ACTIVITY_TYPE_REGEX = "playing|watching|listening|streaming";
     private static final String TAGS_REGEX = "[\\p{L}\\d" + CMD.SPECIAL_CHARS + "]+";
     private static final String STATUS_REGEX = "[\\p{L}_$&+,:;=?@#'<>.^*()%!\\- 0-9\\/]+";
-    private static final String REP_REGEX = "[A-Za-z0-9 ]+";
+    private static final String REP_REGEX = "[A-Za-z0-9äÄöÖüÜß?! ]+";
     private static final String SPECIAL_CHARS = "_$&+,:;=?@#'<>.^*()%!-";
     private static final String INT_REGEX = "\\d+";
     private static final String NAMING_REGEX = "[\\p{L}_$&+,:;=?@#'<>.^*()%!-]+";

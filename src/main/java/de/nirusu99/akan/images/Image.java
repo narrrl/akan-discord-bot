@@ -2,7 +2,7 @@ package de.nirusu99.akan.images;
 
 import de.nirusu99.akan.utils.Host;
 
-public class Image{
+public final class Image{
     private final String url;
     private final String previewUrl;
     private final String[] tags;

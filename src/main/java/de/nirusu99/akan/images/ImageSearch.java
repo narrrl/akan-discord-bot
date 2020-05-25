@@ -11,17 +11,10 @@ public final class ImageSearch {
      */
     private ImageSearch() { };
 
-    public static List<Image> searchFor(final List<String> tags, final int amount, final int page, final Host host) {
-        StringBuilder tag = new StringBuilder();
-        tags.forEach(str -> {
-            tag.append(str.toLowerCase().trim());
-            if (!str.equals(tags.get(tags.size() - 1))) {
-                tag.append("+");
-            }
-        });
+    public static List<Image> searchFor(final String tags, final int amount, final int page, final Host host) {
         String url = host.home()
                 + host.page() + (page - 1)
-                + host.tags() + tag.toString();
+                + host.tags() + tags;
         return Requests.request(url, amount, host);
     }
 }

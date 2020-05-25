@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class Logger {
+public final class Logger {
     final JSONObject obj;
     final File file;
     FileWriter writer;
