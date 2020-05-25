@@ -15,21 +15,44 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public final class Logger {
-    final JSONObject obj;
-    final File file;
+    JSONObject obj;
+    File file;
     FileWriter writer;
+    File logFolder;
 
     public Logger() {
-        file = new File(new File("").getAbsolutePath().concat(File.separator + "log.json"));
+        logFolder = new File(new File("").getAbsolutePath().concat(File.separator + "logs"));
+        logFolder.mkdir();
+        updateFile();
+    }
+
+    private void updateFile() {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDateTime now = LocalDateTime.now();
+        File tmp = new File(logFolder.getAbsolutePath().concat(File.separator + dtf.format(now) + "log.json"));
         try {
+            file = tmp;
+            if (!tmp.exists()) {
+                if (!tmp.createNewFile()) {
+                    System.err.println("couldn't create file");
+                } else {
+                    System.out.println("created log file for " + dtf.format(now));
+                }
+                writer = new FileWriter(tmp);
+                writer.write("{}");
+                writer.flush();
+                writer.close();
+            }
             JSONParser parser = new JSONParser();
             obj = (JSONObject) parser.parse(new FileReader(file));
         } catch (IOException | ParseException e) {
-            throw new IllegalArgumentException(e.getMessage());
+            System.err.println(e.getMessage());
+            return;
         }
     }
 
     public void addLog(MessageReceivedEvent event, final CMD cmd) {
+        updateFile();
         JSONArray array = new JSONArray();
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();

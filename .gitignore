@@ -94,3 +94,4 @@ Thumbs.db
 #bot-files
 /config.json
 /log.json
+logs
