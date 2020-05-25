@@ -5,7 +5,12 @@ public final class EmoteConverter {
     enum Emote {
         ZERO('0'),ONE('1'),TWO('2'),THREE('3'),FOUR('4'),
         FIVE('5'),SIX('6'),SEVEN('7'),EIGHT('8'),NINE('9'),
-        QUESTION('?'),EXCLAMATION('!');
+        QUESTION('?'),EXCLAMATION('!'),SPACE(' ') {
+            @Override
+            public String toString() {
+                return "\n";
+            }
+        };
 
         private final char number;
 
@@ -22,6 +27,11 @@ public final class EmoteConverter {
             return null;
         }
 
+
+        @Override
+        public String toString() {
+            return ":"+ super.toString() + ":";
+        }
     }
 
     private EmoteConverter() { }
@@ -36,7 +46,7 @@ public final class EmoteConverter {
         for (int i = 0; i < output.length; i++) {
             Emote n = Emote.getNumber(chars[i]);
             if (n != null) {
-                output[i] = ":" + n.name().toLowerCase() + ":";
+                output[i] = n.toString().toLowerCase();
             } else {
                 output[i] = ":regional_indicator_" + chars[i] + ":";
             }
