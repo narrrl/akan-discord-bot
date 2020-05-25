@@ -40,6 +40,7 @@ public enum ActivitySetter {
         for (ActivitySetter a : ActivitySetter.values()) {
             if (a.type.equals(type)) {
                 a.setActivity(input, event);
+                return;
             }
         }
         throw new IllegalArgumentException("invalid status type");
