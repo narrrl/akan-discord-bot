@@ -1,13 +1,42 @@
 package de.nirusu99.akan.utils;
 
-import java.util.Arrays;
+import de.nirusu99.akan.images.Image;
+import java.util.*;
 import java.util.stream.Collectors;
+import org.jdom2.*;
 
 public enum Host {
     GELBOORU("https://gelbooru.com/index.php?page=dapi&s=post&q=index","&pid=","&tags=",
             "https://gelbooru.com/index.php?page=post&s=view&id="),
     SAFEBOORU("https://safebooru.org/index.php?page=dapi&s=post&q=index","&pid=","&tags=",
-            "https://safebooru.org/index.php?page=post&s=view&id=");
+            "https://safebooru.org/index.php?page=post&s=view&id="),
+    DANBOORU("https://danbooru.donmai.us/posts.xml","?page=","&tags=",
+            "https://danbooru.donmai.us/posts/") {
+        @Override
+        public List<Image> getImages(Document doc, final int amount) {
+            List<Image> images = new ArrayList<>();
+            Element rootElement = doc.getRootElement();
+            List<Content> contents = rootElement.getContent();
+            int max = contents.size();
+            Random rand = new Random();
+            for (int x = 1; x <= amount && x <= max; x++) {
+                int i = rand.nextInt(max);
+                Content c = contents.get(i);
+                while(!c.toString().equals("[Element: <post/>]")) {
+                    i = rand.nextInt(max - 1);
+                    c = contents.get(i);
+                }
+                String fileUrl = ((Element) c).getChild("large-file-url").getValue();
+                String previewUrl = ((Element) c).getChild("preview-file-url").getValue();
+                String source = ((Element) c).getChild("source").getValue();
+                String[] tags = ((Element) c).getChild("tag-string").getValue().split(" ",-1);
+                String id = ((Element) c).getChild("id").getValue();
+                images.add(new Image(fileUrl, previewUrl, tags, source, id, this));
+            }
+            return images;
+        }
+
+    };
 
     public final static String HOSTS_REGEX = Arrays.stream(Host.values()).map(Enum::toString)
             .collect(Collectors.joining("|")).toLowerCase();
@@ -46,5 +75,28 @@ public enum Host {
             }
         }
         throw new IllegalArgumentException("host " + value + " not found");
+    }
+
+    public List<Image> getImages(Document doc, final int amount) {
+        List<Image> images = new ArrayList<>();
+        Element rootElement = doc.getRootElement();
+        List<Content> contents = rootElement.getContent();
+        int max = contents.size();
+        Random rand = new Random();
+        for (int x = 1; x <= amount && x <= max; x++) {
+            int i = rand.nextInt(max);
+            Content c = contents.get(i);
+            while(!c.toString().equals("[Element: <post/>]")) {
+                i = rand.nextInt(max - 1);
+                c = contents.get(i);
+            }
+            String fileUrl = ((Element) c).getAttributeValue("file_url");
+            String previewUrl = ((Element) c).getAttributeValue("preview_url");
+            String source = ((Element) c).getAttributeValue("source");
+            String[] tags = ((Element) c).getAttributeValue("tags").split(" ");
+            String id = ((Element) c).getAttributeValue("id");
+            images.add(new Image(fileUrl, previewUrl, tags, source, id, this));
+        }
+        return images;
     }
 }

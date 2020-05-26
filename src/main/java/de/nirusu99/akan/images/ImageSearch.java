@@ -1,7 +1,11 @@
 package de.nirusu99.akan.images;
 
 import de.nirusu99.akan.utils.Host;
-import de.nirusu99.akan.utils.Requests;
+import org.jdom2.Document;
+import org.jdom2.JDOMException;
+import org.jdom2.input.SAXBuilder;
+import java.io.IOException;
+import java.net.URL;
 import java.util.List;
 
 public final class ImageSearch {
@@ -15,6 +19,13 @@ public final class ImageSearch {
         String url = host.home()
                 + host.page() + (page - 1)
                 + host.tags() + tags;
-        return Requests.request(url, amount, host);
+        SAXBuilder builder = new SAXBuilder();
+        Document document;
+        try {
+            document = builder.build(new URL(url));
+        } catch (IOException | JDOMException e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
+        return host.getImages(document, amount);
     }
 }
