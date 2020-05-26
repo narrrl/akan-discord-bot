@@ -6,6 +6,7 @@ import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Collection;
 import java.util.List;
 
 public final class ImageSearch {
@@ -15,7 +16,7 @@ public final class ImageSearch {
      */
     private ImageSearch() { };
 
-    public static List<Image> searchFor(final String tags, final int amount, final int page, final Host host) {
+    public static Collection<Image> searchFor(final String tags, final int amount, final int page, final Host host) {
         String url = host.home()
                 + host.page() + (page - 1)
                 + host.tags() + tags;

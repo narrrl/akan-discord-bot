@@ -1,8 +1,9 @@
 package de.nirusu99.akan.images;
 
 import de.nirusu99.akan.utils.Host;
+import org.jetbrains.annotations.NotNull;
 
-public final class Image{
+public final class Image implements Comparable<Image> {
     private final String url;
     private final String previewUrl;
     private final String[] tags;
@@ -45,5 +46,30 @@ public final class Image{
 
     public String getPostUrl() {
         return host.postUrl() + id;
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null) {
+            return false;
+        }
+        if (o == this) {
+            return true;
+        }
+        if (o.getClass() == this.getClass()) {
+            Image img = (Image) o;
+            return img.id.equals(this.id);
+        }
+        return false;
+    }
+
+    @Override
+    public int compareTo(@NotNull Image image) {
+        return this.hashCode() - image.hashCode();
     }
 }

@@ -12,6 +12,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -135,7 +136,7 @@ public enum CMD {
                         "Pages start at 1");
             }
             String tags = matcher.group(2);
-            List<Image> images = ImageSearch.searchFor(tags, amount, page, Host.getHost(matcher.group(1)));
+            Collection<Image> images = ImageSearch.searchFor(tags, amount, page, Host.getHost(matcher.group(1)));
             if (images.size() == 0) {
                 event.getChannel().sendMessage("no pictures found for tags " + tags).queue();
             } else {
@@ -157,7 +158,7 @@ public enum CMD {
 
         @Override
         String syntax() {
-            return "<prefix>search <gelbooru|safebooru> <tag+tag+tag...> <amount> <page>";
+            return "<prefix>search <" + Host.HOSTS_REGEX + "> <tag+tag+tag...> <amount> <page>";
         }
 
         @Override

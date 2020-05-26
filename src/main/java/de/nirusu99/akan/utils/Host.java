@@ -17,15 +17,13 @@ public enum Host {
             List<Image> images = new ArrayList<>();
             Element rootElement = doc.getRootElement();
             List<Content> contents = rootElement.getContent();
-            int max = contents.size();
             Random rand = new Random();
+            contents = contents.stream().filter(c ->
+                    c.toString().equals(POST)).collect(Collectors.toList());
+            int max = contents.size();
             for (int x = 1; x <= amount && x <= max; x++) {
                 int i = rand.nextInt(max);
                 Content c = contents.get(i);
-                while(!c.toString().equals("[Element: <post/>]")) {
-                    i = rand.nextInt(max - 1);
-                    c = contents.get(i);
-                }
                 String fileUrl = ((Element) c).getChild("large-file-url").getValue();
                 String previewUrl = ((Element) c).getChild("preview-file-url").getValue();
                 String source = ((Element) c).getChild("source").getValue();
@@ -40,6 +38,7 @@ public enum Host {
 
     public final static String HOSTS_REGEX = Arrays.stream(Host.values()).map(Enum::toString)
             .collect(Collectors.joining("|")).toLowerCase();
+    private final static String POST = "[Element: <post/>]";
     final String home;
     final String page;
     final String tags;
@@ -77,19 +76,16 @@ public enum Host {
         throw new IllegalArgumentException("host " + value + " not found");
     }
 
-    public List<Image> getImages(Document doc, final int amount) {
-        List<Image> images = new ArrayList<>();
+    public Collection<Image> getImages(Document doc, final int amount) {
+        Set<Image> images = new HashSet<>();
         Element rootElement = doc.getRootElement();
-        List<Content> contents = rootElement.getContent();
+        List<Content> contents = rootElement.getContent().stream().filter(c
+                -> c.toString().equals(POST)).collect(Collectors.toList());
         int max = contents.size();
         Random rand = new Random();
         for (int x = 1; x <= amount && x <= max; x++) {
             int i = rand.nextInt(max);
             Content c = contents.get(i);
-            while(!c.toString().equals("[Element: <post/>]")) {
-                i = rand.nextInt(max - 1);
-                c = contents.get(i);
-            }
             String fileUrl = ((Element) c).getAttributeValue("file_url");
             String previewUrl = ((Element) c).getAttributeValue("preview_url");
             String source = ((Element) c).getAttributeValue("source");
