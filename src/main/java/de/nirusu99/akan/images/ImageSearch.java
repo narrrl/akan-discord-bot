@@ -1,13 +1,11 @@
 package de.nirusu99.akan.images;
 
-import de.nirusu99.akan.utils.Host;
 import org.jdom2.Document;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Collection;
-import java.util.List;
 
 public final class ImageSearch {
 

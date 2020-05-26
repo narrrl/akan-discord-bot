@@ -1,11 +1,11 @@
-package de.nirusu99.akan.ui;
+package de.nirusu99.akan.commands;
 
 import de.nirusu99.akan.AkanBot;
 import de.nirusu99.akan.images.Image;
 import de.nirusu99.akan.images.ImageSearch;
 import de.nirusu99.akan.utils.ActivitySetter;
 import de.nirusu99.akan.utils.EmoteConverter;
-import de.nirusu99.akan.utils.Host;
+import de.nirusu99.akan.images.Host;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -26,7 +26,7 @@ import java.util.regex.Pattern;
 public enum CMD {
     /**
      * Shutdown the bot, didn't find a better way just yet.
-     * Checks if the user is a owner {@link de.nirusu99.akan.ui.CMD#OWNERS}.
+     * Checks if the user is a owner {@link de.nirusu99.akan.commands.CMD#OWNERS}.
      */
     EXIT("exit") {
         @Override
@@ -34,7 +34,8 @@ public enum CMD {
             if (CMD.userIsOwner(event.getAuthor())) {
                 event.getChannel().sendMessage("bai bai!").queue();
                 event.getChannel().sendMessage("<:megu:666743067755151360>").complete();
-                System.exit(0);
+                bot.printInfo("shutting down");
+                event.getJDA().shutdown();
             } else {
                 throw new IllegalArgumentException("Only bot owner can do that!");
             }
@@ -57,11 +58,10 @@ public enum CMD {
         @Override
         void run(AkanBot bot, MessageReceivedEvent event, Matcher matcher) {
             MessageChannel channel = event.getChannel();
-            long time = System.currentTimeMillis();
             channel.sendMessage("Pong!")
                     .queue(response -> response
                             .editMessageFormat("Pong: %d ms <a:loading:529887640472911922>",
-                                    System.currentTimeMillis() - time).queue());
+                                    event.getJDA().getGatewayPing()).queue());
         }
 
         @Override
@@ -81,7 +81,7 @@ public enum CMD {
     },
     /**
      * Changes the bot prefix with {@link de.nirusu99.akan.AkanBot#setPrefix(String)}
-     * Checks if the user is a owner {@link de.nirusu99.akan.ui.CMD#OWNERS}.
+     * Checks if the user is a owner {@link de.nirusu99.akan.commands.CMD#OWNERS}.
      */
     PREFIX("prefix (" + CMD.PREFIX_REGEX + ")") {
         @Override
@@ -362,12 +362,12 @@ public enum CMD {
 
                     icon = Icon.from(file);
                 } catch (IOException e) {
-                    if (!file.delete()) System.err.println("couldn't delete picture!");
+                    if (!file.delete()) bot.printInfo("couldn't delete picture!");
                     throw new IllegalArgumentException(e.getMessage());
                 }
                 event.getJDA().getSelfUser().getManager().setAvatar(icon).queue();
                 event.getChannel().sendMessage("updated avatar!").complete();
-                if (!file.delete()) System.err.println("couldn't delete picture!");
+                if (!file.delete()) bot.printInfo("couldn't delete picture!");
             } else {
                 event.getChannel().sendMessage("Only the bot owner can change the avatar").complete();
             }

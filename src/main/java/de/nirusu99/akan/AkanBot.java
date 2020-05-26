@@ -2,31 +2,44 @@ package de.nirusu99.akan;
 
 import de.nirusu99.akan.core.Config;
 import de.nirusu99.akan.core.Logger;
-import de.nirusu99.akan.ui.CMD;
+import de.nirusu99.akan.commands.CMD;
+
+import javax.annotation.Nonnull;
 import javax.security.auth.login.LoginException;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
+import org.slf4j.LoggerFactory;
 
 public class AkanBot extends ListenerAdapter {
-    private static final String DEFAULT_PREFIX = "a!";
     private final Config conf;
     private final Logger log;
+    private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(AkanBot.class);
     private String prefix;
 
-    AkanBot() throws LoginException, InterruptedException {
+    AkanBot(final boolean sharding) throws LoginException, InterruptedException {
         conf = new Config();
-        log = new Logger();
+        log = new Logger(this);
         this.prefix = conf.getPrefix();
-        JDABuilder jda = JDABuilder.createDefault(conf.getToken());
-        jda.addEventListeners(this)
-                .setActivity(Activity.playing("Hewwo Senpai")).build().awaitReady();
-        jda.setAutoReconnect(true)
-                .setStatus(OnlineStatus.ONLINE);
+        if (sharding) {
+            DefaultShardManagerBuilder shardManager = new DefaultShardManagerBuilder();
+            shardManager.setToken(conf.getToken())
+                    .setActivity(Activity.listening("a!help"))
+                    .addEventListeners(this).build();
+        } else {
+            JDABuilder jda = JDABuilder.createDefault(conf.getToken());
+            jda.addEventListeners(this)
+                    .setActivity(Activity.playing("Hewwo Senpai")).build().awaitReady();
+            jda.setAutoReconnect(true)
+                    .setStatus(OnlineStatus.ONLINE);
+        }
     }
+
 
     /**
      * Starts the bot
@@ -36,12 +49,12 @@ public class AkanBot extends ListenerAdapter {
         try {
             AkanBot.start();
         } catch (LoginException | InterruptedException e) {
-            System.err.println(e.getMessage());
+            AkanBot.LOGGER.info(e.getMessage());
         }
     }
 
     public static void start() throws LoginException, InterruptedException {
-        new AkanBot();
+        new AkanBot(false);
     }
 
     public boolean isCheckMark() {
@@ -64,8 +77,12 @@ public class AkanBot extends ListenerAdapter {
         return log;
     }
 
+    public void printInfo(final String info) {
+        LOGGER.info(info);
+    }
+
     @Override
-    public void onMessageReceived(MessageReceivedEvent event) {
+    public void onMessageReceived(@Nonnull MessageReceivedEvent event) {
         Message msg = event.getMessage();
         if (msg.getContentRaw().startsWith(this.prefix)) {
             try {
@@ -75,5 +92,13 @@ public class AkanBot extends ListenerAdapter {
             }
         }
     }
+
+    @Override
+    public void onReady(@Nonnull ReadyEvent event) {
+        LOGGER.info("{} ready", event.getJDA().getSelfUser().getAsTag());
+    }
+
+
+
 
 }

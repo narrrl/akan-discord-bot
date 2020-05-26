@@ -1,6 +1,5 @@
-package de.nirusu99.akan.utils;
+package de.nirusu99.akan.images;
 
-import de.nirusu99.akan.images.Image;
 import java.util.*;
 import java.util.stream.Collectors;
 import org.jdom2.*;
@@ -12,8 +11,16 @@ public enum Host {
             "https://safebooru.org/index.php?page=post&s=view&id="),
     DANBOORU("https://danbooru.donmai.us/posts.xml","?page=","&tags=",
             "https://danbooru.donmai.us/posts/") {
+        /**
+         * Overrides the default {@link de.nirusu99.akan.images.Host#getImages(Document, int)}
+         * because danbooru is slightly different. The information is not stored in attributes
+         * but as child's of the post.
+         * @param doc the xml document
+         * @param amount the amount of requested pictures
+         * @return the requested pictures
+         */
         @Override
-        public List<Image> getImages(Document doc, final int amount) {
+        List<Image> getImages(Document doc, final int amount) {
             List<Image> images = new ArrayList<>();
             Element rootElement = doc.getRootElement();
             List<Content> contents = rootElement.getContent();
@@ -51,19 +58,19 @@ public enum Host {
         this.postUrl = postUrl;
     }
 
-    public String postUrl() {
+    String postUrl() {
         return this.postUrl;
     }
 
-    public String home() {
+    String home() {
         return this.home;
     }
 
-    public String page() {
+    String page() {
         return this.page;
     }
 
-    public String tags() {
+    String tags() {
         return this.tags;
     }
 
@@ -76,7 +83,7 @@ public enum Host {
         throw new IllegalArgumentException("host " + value + " not found");
     }
 
-    public Collection<Image> getImages(Document doc, final int amount) {
+    Collection<Image> getImages(Document doc, final int amount) {
         Set<Image> images = new HashSet<>();
         Element rootElement = doc.getRootElement();
         List<Content> contents = rootElement.getContent().stream().filter(c

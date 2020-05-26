@@ -1,6 +1,5 @@
 package de.nirusu99.akan.images;
 
-import de.nirusu99.akan.utils.Host;
 import org.jetbrains.annotations.NotNull;
 
 public final class Image implements Comparable<Image> {

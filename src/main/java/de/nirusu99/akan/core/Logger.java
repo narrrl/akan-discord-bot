@@ -1,6 +1,7 @@
 package de.nirusu99.akan.core;
 
-import de.nirusu99.akan.ui.CMD;
+import de.nirusu99.akan.AkanBot;
+import de.nirusu99.akan.commands.CMD;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -15,14 +16,18 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public final class Logger {
+    AkanBot bot;
     JSONObject obj;
     File file;
     FileWriter writer;
     File logFolder;
 
-    public Logger() {
+    public Logger(final AkanBot bot) {
+        this.bot = bot;
         logFolder = new File(new File("").getAbsolutePath().concat(File.separator + "logs"));
-        logFolder.mkdir();
+        if (logFolder.mkdir()) {
+            bot.printInfo("created logs directory");
+        }
         updateFile();
     }
 
@@ -34,9 +39,9 @@ public final class Logger {
             file = tmp;
             if (!tmp.exists()) {
                 if (!tmp.createNewFile()) {
-                    System.err.println("couldn't create file");
+                    bot.printInfo("couldn't create new log file for " + dtf.format(now));
                 } else {
-                    System.out.println("created log file for " + dtf.format(now));
+                    bot.printInfo("created log file for " + dtf.format(now));
                 }
                 writer = new FileWriter(tmp);
                 writer.write("{}");
@@ -46,12 +51,11 @@ public final class Logger {
             JSONParser parser = new JSONParser();
             obj = (JSONObject) parser.parse(new FileReader(file));
         } catch (IOException | ParseException e) {
-            System.err.println(e.getMessage());
-            return;
+            bot.printInfo(e.getMessage());
         }
     }
 
-    public void addLog(MessageReceivedEvent event, final CMD cmd) {
+    public synchronized void addLog(MessageReceivedEvent event, final CMD cmd) {
         updateFile();
         JSONArray array = new JSONArray();
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -67,7 +71,7 @@ public final class Logger {
         obj.put(dtf.format(now),array);
         try {
             if (!file.canWrite()) {
-                System.err.println("Logger: Couldn't writer log.json");
+                bot.printInfo("Logger: Couldn't write log.json");
             }
             writer = new FileWriter(file);
             writer.write(obj.toJSONString());

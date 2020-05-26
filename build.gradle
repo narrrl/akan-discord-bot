@@ -34,6 +34,7 @@ dependencies {
     compile 'net.dv8tion:JDA:4.1.1_154'
     // https://mvnrepository.com/artifact/org.jdom/jdom2
     compile group: 'org.jdom', name: 'jdom2', version: '2.0.6'
+    compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
     // compile 'com.google.api-client:google-api-client:1.30.9'
     implementation 'commons-io:commons-io:2.6'
 }
