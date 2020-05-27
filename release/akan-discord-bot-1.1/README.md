@@ -1,6 +1,6 @@
 ### Configure config.json
 
-- add your bot token to the config.json, to get a bot token visit:
+- add your bot token to the config.json. To get a bot token visit:
 https://discordapp.com/developers/applications
 - successReaction true if you want reaction upon command execution
 - prefix is the bot prefix
