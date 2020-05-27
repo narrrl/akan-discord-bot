@@ -2,11 +2,18 @@ package de.nirusu99.akan.commands.help;
 
 import de.nirusu99.akan.commands.CommandContext;
 import de.nirusu99.akan.commands.ICommand;
+import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.MessageChannel;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * This {@link ICommand} sends a ping pong message to test the bot. Returns also the {@link JDA#getGatewayPing()}.
+ *
+ * @author Nils Pukropp
+ * @since 1.0
+ */
 public final class Ping implements ICommand {
     private final Pattern pattern = Pattern.compile("ping");
     @Override

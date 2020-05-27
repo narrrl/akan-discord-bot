@@ -11,6 +11,12 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * This {@link ICommand} sends the avatars for given users embedded.
+ *
+ * @author Nils Pukropp
+ * @since 1.0
+ */
 public final class Avatar  implements ICommand {
     private static final Pattern PATTERN = Pattern.compile("avatar( " + Const.USER_REGEX + ")+");
 
@@ -24,7 +30,6 @@ public final class Avatar  implements ICommand {
             .setColor(Color.PINK);
             ctx.getChannel().sendTyping().queue(rep ->
                     ctx.getChannel().sendMessage(emb.build()).queue());
-            ;
         }
 
     }

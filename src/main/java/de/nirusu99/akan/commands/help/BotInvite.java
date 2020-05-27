@@ -2,12 +2,19 @@ package de.nirusu99.akan.commands.help;
 
 import de.nirusu99.akan.commands.CommandContext;
 import de.nirusu99.akan.commands.ICommand;
+import de.nirusu99.akan.images.Host;
 import net.dv8tion.jda.api.EmbedBuilder;
 
 import java.awt.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * This {@link ICommand} sends a invite link for the bot embedded.
+ *
+ * @author Nils Pukropp
+ * @since 1.0
+ */
 public final class BotInvite implements ICommand {
     private static final Pattern PATTERN = Pattern.compile("botinvite");
 

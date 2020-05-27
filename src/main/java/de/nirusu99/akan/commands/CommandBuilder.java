@@ -6,6 +6,12 @@ import java.util.regex.Matcher;
 public class CommandBuilder {
     private CommandBuilder() {throw new IllegalAccessError();}
 
+    /**
+     * Finds the {@link ICommand} that matches the input and returns its.
+     * The commands get loaded from {@link ServiceLoader}.
+     * @param input the user input
+     * @return the matching {@link ICommand} or null
+     */
     public static ICommand createCommand(final String input) {
         for (ICommand cmd : ServiceLoader.load(ICommand.class)) {
             Matcher matcher = cmd.matches(input);

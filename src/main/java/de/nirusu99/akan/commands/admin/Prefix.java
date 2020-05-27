@@ -10,6 +10,13 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * This {@link ICommand} sets the bot prefix. The bot keeps the new prefix because of {@link AkanBot#setPrefix(String)}
+ * that uses the {@link de.nirusu99.akan.core.Config} to store the prefix.
+ *
+ * @author Nils Pukropp
+ * @since 1.0
+ */
 public final class Prefix implements ICommand {
     private final static Pattern PATTERN = Pattern.compile("prefix " + Const.PREFIX_REGEX);
 

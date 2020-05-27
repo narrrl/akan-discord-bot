@@ -1,11 +1,13 @@
 package de.nirusu99.akan.commands.fun;
 
+import de.nirusu99.akan.AkanBot;
 import de.nirusu99.akan.commands.CommandContext;
 import de.nirusu99.akan.commands.ICommand;
 import de.nirusu99.akan.images.Host;
 import de.nirusu99.akan.images.Image;
 import de.nirusu99.akan.utils.Const;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.User;
 
 import java.awt.*;
 import java.util.Collection;
@@ -13,6 +15,14 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * This {@link ICommand} searches for images in given domains ({@link Host}).
+ * This class only gets the user input and embeds the images into messages,
+ * the logic is implemented in {@link Host#searchForImages(String, int, int)}.
+ *
+ * @author Nils Pukropp
+ * @since 1.0
+ */
 public final class Search implements ICommand {
     private final static Pattern pattern = Pattern.compile("search ("+ Host.HOSTS_REGEX +") (" + Const.TAGS_REGEX + ")( "
             + Const.INT_REGEX + ")?( " + Const.INT_REGEX + ")?");
@@ -37,7 +47,7 @@ public final class Search implements ICommand {
                     "Pages start at 1");
         }
         String tags = args.get(1);
-        Collection<Image> images = Host.searchFor(tags, amount, page, Host.getHost(args.get(0)));
+        Collection<Image> images = Host.getHost(args.get(0)).searchForImages(tags, amount, page);
         if (images.size() == 0) {
             cfx.getChannel().sendTyping().queue(rep ->
                     cfx.getChannel().sendMessage("no pictures found for tags " + tags).queue());

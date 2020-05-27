@@ -1,5 +1,11 @@
 package de.nirusu99.akan.commands;
 
+/**
+ * Error messages for {@link ICommand}.
+ *
+ * @author Nils Pukropp
+ * @since 1.0
+ */
 public enum Error {
     NOT_OWNER {
         @Override

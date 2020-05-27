@@ -3,6 +3,7 @@ package de.nirusu99.akan.commands.help;
 import de.nirusu99.akan.commands.CommandContext;
 import de.nirusu99.akan.commands.ICommand;
 import de.nirusu99.akan.commands.CommandBuilder;
+import de.nirusu99.akan.images.Host;
 import de.nirusu99.akan.utils.Const;
 import net.dv8tion.jda.api.EmbedBuilder;
 
@@ -12,12 +13,20 @@ import java.util.regex.Pattern;
 
 import static de.nirusu99.akan.utils.Const.LINE_BREAK;
 
+
+/**
+ * This {@link ICommand} sends help for given commands or without any args sends a total list of all commands loaded by
+ * {@link CommandBuilder#getCommands()}.
+ *
+ * @author Nils Pukropp
+ * @since 1.0
+ */
 public final class Help implements ICommand {
     private static final Pattern PATTERN = Pattern.compile("help( " + Const.NAMING_REGEX + ")?");
 
     @Override
     public void run(CommandContext cfx) {
-        if (cfx.getArgs().size() < 1) {
+        if (cfx.getArgs().isEmpty()) {
             StringBuilder out = new StringBuilder();
             CommandBuilder.getCommands().forEach(cmd -> out.append(cmd.getName()).append("\n"));
             EmbedBuilder emb = new EmbedBuilder();

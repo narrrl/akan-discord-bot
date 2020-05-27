@@ -1,14 +1,23 @@
 package de.nirusu99.akan.commands.fun;
 
+import de.nirusu99.akan.AkanBot;
 import de.nirusu99.akan.commands.CommandContext;
 import de.nirusu99.akan.commands.ICommand;
 import de.nirusu99.akan.utils.Const;
 import de.nirusu99.akan.utils.EmoteConverter;
+import net.dv8tion.jda.api.entities.User;
 
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * This {@link ICommand} repeats the users input converted to emotes.
+ * The emotes get converted in {@link EmoteConverter}
+ *
+ * @author Nils Pukropp
+ * @since 1.0
+ */
 public final class Rep implements ICommand {
     private final static Pattern PATTERN = Pattern.compile("rep( " + Const.REP_REGEX + ")?");
 

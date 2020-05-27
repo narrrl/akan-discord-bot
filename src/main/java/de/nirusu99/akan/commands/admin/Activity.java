@@ -11,6 +11,14 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * This {@link ICommand} sets the activity for the bot.
+ * The {@link CommandContext#getArgs()} must return 2 or more elements.
+ * The different kinds of activities are stored in {@link Activity}.
+ *
+ * @author Nils Pukropp
+ * @since 1.0
+ */
 public final class Activity implements ICommand {
     private final static Pattern PATTERN = Pattern
             .compile("activity (" + Const.ACTIVITY_TYPE_REGEX + ") " + Const.STATUS_REGEX);
