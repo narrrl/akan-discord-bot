@@ -4,7 +4,6 @@ import de.nirusu99.akan.commands.CommandContext;
 import de.nirusu99.akan.commands.ICommand;
 import de.nirusu99.akan.images.Host;
 import de.nirusu99.akan.images.Image;
-import de.nirusu99.akan.images.ImageSearch;
 import de.nirusu99.akan.utils.Const;
 import net.dv8tion.jda.api.EmbedBuilder;
 
@@ -38,7 +37,7 @@ public final class Search implements ICommand {
                     "Pages start at 1");
         }
         String tags = args.get(1);
-        Collection<Image> images = ImageSearch.searchFor(tags, amount, page, Host.getHost(args.get(0)));
+        Collection<Image> images = Host.searchFor(tags, amount, page, Host.getHost(args.get(0)));
         if (images.size() == 0) {
             cfx.getChannel().sendTyping().queue(rep ->
                     cfx.getChannel().sendMessage("no pictures found for tags " + tags).queue());

@@ -56,14 +56,10 @@ public class AkanBot extends ListenerAdapter {
      */
     public static void main(String[] args) {
         try {
-            AkanBot.start();
+            new AkanBot(true);
         } catch (LoginException e) {
             AkanBot.LOGGER.info(e.getMessage());
         }
-    }
-
-    public static void start() throws LoginException {
-        new AkanBot(true);
     }
 
     public boolean withSuccessReaction() {

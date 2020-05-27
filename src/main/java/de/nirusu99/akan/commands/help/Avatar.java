@@ -6,6 +6,7 @@ import de.nirusu99.akan.utils.Const;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 
+import java.awt.*;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -19,7 +20,8 @@ public final class Avatar  implements ICommand {
         for (Member m : users) {
             final EmbedBuilder emb = new EmbedBuilder();
             emb.setTitle(m.getUser().getAsTag(),m.getUser().getAvatarUrl())
-                    .setImage(m.getUser().getEffectiveAvatarUrl() + "?size=512");
+                    .setImage(m.getUser().getEffectiveAvatarUrl() + "?size=512")
+            .setColor(Color.PINK);
             ctx.getChannel().sendTyping().queue(rep ->
                     ctx.getChannel().sendMessage(emb.build()).queue());
             ;
