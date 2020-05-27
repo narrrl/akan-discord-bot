@@ -1,0 +1,57 @@
+package de.nirusu99.akan.commands.admin;
+
+import de.nirusu99.akan.AkanBot;
+import de.nirusu99.akan.commands.CommandContext;
+import de.nirusu99.akan.commands.Error;
+import de.nirusu99.akan.commands.ICommand;
+import de.nirusu99.akan.utils.Const;
+
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public final class SuccessReaction implements ICommand {
+    private final static Pattern PATTERN = Pattern.compile("successreaction (" + Const.BOOLEAN_REGEX + ")");
+
+    @Override
+    public void run(CommandContext ctx) {
+        if (AkanBot.userIsOwner(ctx.getAuthor())) {
+            List<String> args = ctx.getArgs();
+            if (args.size() != 1) {
+                ctx.getChannel().sendTyping().queue(rep ->
+                        ctx.getChannel().sendMessage(Error.INVALID_ARGUMENTS.toString()).queue());
+                return;
+            }
+            ctx.setSuccessReaction(Boolean.parseBoolean(args.get(0)));
+
+        } else {
+            ctx.getChannel().sendTyping().queue(rep ->
+                    ctx.getChannel().sendMessage(Error.NOT_OWNER.toString()).queue());
+        }
+    }
+
+    @Override
+    public String getName() {
+        return "successreaction";
+    }
+
+    @Override
+    public String syntax() {
+        return "<prefix>successreaction <true|false>";
+    }
+
+    @Override
+    public String gifHelpUrl() {
+        return null;
+    }
+
+    @Override
+    public Matcher matches(String input) {
+        return PATTERN.matcher(input);
+    }
+
+    @Override
+    public String toString() {
+        return "reacts to your message when command gets executed";
+    }
+}
