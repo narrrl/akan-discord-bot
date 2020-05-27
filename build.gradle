@@ -17,7 +17,7 @@ plugins {
 apply plugin: 'com.github.johnrengelman.shadow'
 
 group 'de.nirusu99'
-version '1.0'
+version '1.1'
 mainClassName = 'de.nirusu99.akan.AkanBot'
 
 repositories {
@@ -30,8 +30,9 @@ repositories {
 
 dependencies {
     // https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple
+    implementation group: 'me.duncte123', name: 'botCommons', version: '1.0.88'
     compile group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1'
-    compile 'net.dv8tion:JDA:4.1.1_154'
+    compile 'net.dv8tion:JDA:4.1.1_155'
     // https://mvnrepository.com/artifact/org.jdom/jdom2
     compile group: 'org.jdom', name: 'jdom2', version: '2.0.6'
     compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'

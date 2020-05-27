@@ -1,8 +1,9 @@
 package de.nirusu99.akan.core;
 
 import de.nirusu99.akan.AkanBot;
-import de.nirusu99.akan.commands.CMD;
+import de.nirusu99.akan.commands.ICommand;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -55,19 +56,16 @@ public final class Logger {
         }
     }
 
-    public synchronized void addLog(MessageReceivedEvent event, final CMD cmd) {
+    public synchronized void addLog(GuildMessageReceivedEvent event, final ICommand cmd) {
         updateFile();
         JSONArray array = new JSONArray();
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
         array.add(event.getAuthor().getAsTag());
         array.add(event.getMessage().getContentRaw());
-        array.add(cmd.name());
-        array.add(event.getChannelType().name().toLowerCase());
-        if (event.getChannelType().getId() == 0) {
-            array.add(String.valueOf(event.getGuild()));
-            array.add(event.getChannel().getName());
-        }
+        array.add(cmd.getName());
+        array.add(String.valueOf(event.getGuild()));
+        array.add(event.getChannel().getName());
         obj.put(dtf.format(now),array);
         try {
             if (!file.canWrite()) {

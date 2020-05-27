@@ -1,5 +1,6 @@
 package de.nirusu99.akan.core;
 
+import net.dv8tion.jda.api.entities.Emote;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -40,13 +41,13 @@ public final class Config {
         return prefix;
     }
 
-    public boolean withCheckMark() {
-        return Boolean.parseBoolean((String) obj.get("checkMark"));
+    public boolean withSuccessReaction() {
+        return Boolean.parseBoolean((String) obj.get("successReaction"));
     }
 
     public void setCheckMark(final boolean b) {
-        obj.remove("checkMark");
-        obj.put("checkMark",String.valueOf(b));
+        obj.remove("successReaction");
+        obj.put("successReaction",String.valueOf(b));
         try {
             writer = new FileWriter(file);
             writer.write(obj.toJSONString());
