@@ -6,6 +6,7 @@ import de.nirusu99.akan.commands.CommandBuilder;
 import de.nirusu99.akan.images.Host;
 import de.nirusu99.akan.utils.Const;
 import net.dv8tion.jda.api.EmbedBuilder;
+import org.kohsuke.MetaInfServices;
 
 import java.awt.*;
 import java.util.regex.Matcher;
@@ -21,6 +22,7 @@ import static de.nirusu99.akan.utils.Const.LINE_BREAK;
  * @author Nils Pukropp
  * @since 1.0
  */
+@MetaInfServices(ICommand.class)
 public final class Help implements ICommand {
     private static final Pattern PATTERN = Pattern.compile("help( " + Const.NAMING_REGEX + ")?");
 

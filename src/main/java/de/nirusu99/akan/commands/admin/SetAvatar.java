@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.entities.Icon;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.SelfUser;
 import net.dv8tion.jda.api.entities.User;
+import org.kohsuke.MetaInfServices;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,6 +25,7 @@ import java.util.regex.Pattern;
  * @author Nils Pukropp
  * @since 1.1
  */
+@MetaInfServices(ICommand.class)
 public final class SetAvatar implements ICommand {
     private static final Pattern PATTERN = Pattern.compile("setavatar");
 

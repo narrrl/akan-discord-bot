@@ -6,6 +6,7 @@ import de.nirusu99.akan.commands.Error;
 import de.nirusu99.akan.commands.ICommand;
 import de.nirusu99.akan.utils.ActivitySetter;
 import de.nirusu99.akan.utils.Const;
+import org.kohsuke.MetaInfServices;
 
 import java.util.List;
 import java.util.regex.Matcher;
@@ -19,6 +20,7 @@ import java.util.regex.Pattern;
  * @author Nils Pukropp
  * @since 1.0
  */
+@MetaInfServices(ICommand.class)
 public final class Activity implements ICommand {
     private final static Pattern PATTERN = Pattern
             .compile("activity (" + Const.ACTIVITY_TYPE_REGEX + ") " + Const.STATUS_REGEX);

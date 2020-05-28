@@ -4,6 +4,7 @@ import de.nirusu99.akan.commands.CommandContext;
 import de.nirusu99.akan.commands.ICommand;
 import de.nirusu99.akan.images.Host;
 import net.dv8tion.jda.api.EmbedBuilder;
+import org.kohsuke.MetaInfServices;
 
 import java.awt.*;
 import java.util.regex.Matcher;
@@ -15,6 +16,7 @@ import java.util.regex.Pattern;
  * @author Nils Pukropp
  * @since 1.0
  */
+@MetaInfServices(ICommand.class)
 public final class BotInvite implements ICommand {
     private static final Pattern PATTERN = Pattern.compile("botinvite");
 

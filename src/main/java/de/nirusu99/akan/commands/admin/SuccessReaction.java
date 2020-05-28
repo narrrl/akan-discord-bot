@@ -6,6 +6,7 @@ import de.nirusu99.akan.commands.Error;
 import de.nirusu99.akan.commands.ICommand;
 import de.nirusu99.akan.utils.Const;
 import net.dv8tion.jda.api.entities.User;
+import org.kohsuke.MetaInfServices;
 
 import java.util.List;
 import java.util.regex.Matcher;
@@ -21,6 +22,7 @@ import java.util.regex.Pattern;
  * @author Nils Pukropp
  * @since 1.0
  */
+@MetaInfServices(ICommand.class)
 public final class SuccessReaction implements ICommand {
     private final static Pattern PATTERN = Pattern.compile("successreaction (" + Const.BOOLEAN_REGEX + ")");
 

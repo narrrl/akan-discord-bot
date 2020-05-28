@@ -6,6 +6,7 @@ import de.nirusu99.akan.commands.ICommand;
 import de.nirusu99.akan.commands.Error;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.User;
+import org.kohsuke.MetaInfServices;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -18,6 +19,7 @@ import java.util.regex.Pattern;
  * @author Nils Pukropp
  * @since 1.0
  */
+@MetaInfServices(ICommand.class)
 public final class Exit implements ICommand {
     private static final Pattern PATTERN = Pattern.compile("exit");
 

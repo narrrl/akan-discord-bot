@@ -5,6 +5,7 @@ import de.nirusu99.akan.commands.ICommand;
 import de.nirusu99.akan.utils.Const;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
+import org.kohsuke.MetaInfServices;
 
 import java.awt.*;
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.regex.Pattern;
  * @author Nils Pukropp
  * @since 1.0
  */
+@MetaInfServices(ICommand.class)
 public final class Avatar  implements ICommand {
     private static final Pattern PATTERN = Pattern.compile("avatar( " + Const.USER_REGEX + ")+");
 

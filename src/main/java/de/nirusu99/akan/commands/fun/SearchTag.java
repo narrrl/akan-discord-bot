@@ -5,6 +5,7 @@ import de.nirusu99.akan.commands.Error;
 import de.nirusu99.akan.commands.ICommand;
 import de.nirusu99.akan.images.Host;
 import de.nirusu99.akan.utils.Const;
+import org.kohsuke.MetaInfServices;
 
 import java.util.List;
 import java.util.regex.Matcher;
@@ -17,6 +18,7 @@ import java.util.regex.Pattern;
  * @author Nils Pukropp
  * @since 1.1
  */
+@MetaInfServices(ICommand.class)
 public final class SearchTag implements ICommand {
     private final static Pattern PATTERN = Pattern.compile("searchtag (" + Host.HOSTS_REGEX + ") ("
             + Const.TAGS_REGEX + ")");

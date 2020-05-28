@@ -8,6 +8,7 @@ import de.nirusu99.akan.images.Image;
 import de.nirusu99.akan.utils.Const;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.User;
+import org.kohsuke.MetaInfServices;
 
 import java.awt.*;
 import java.util.Collection;
@@ -23,6 +24,7 @@ import java.util.regex.Pattern;
  * @author Nils Pukropp
  * @since 1.0
  */
+@MetaInfServices(ICommand.class)
 public final class Search implements ICommand {
     private final static Pattern pattern = Pattern.compile("search ("+ Host.HOSTS_REGEX +") (" + Const.TAGS_REGEX + ")( "
             + Const.INT_REGEX + ")?( " + Const.INT_REGEX + ")?");
