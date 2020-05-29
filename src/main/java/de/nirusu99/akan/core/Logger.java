@@ -9,12 +9,14 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import javax.annotation.Nonnull;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 public final class Logger {
     AkanBot bot;
@@ -23,7 +25,7 @@ public final class Logger {
     FileWriter writer;
     File logFolder;
 
-    public Logger(final AkanBot bot) {
+    public Logger(@Nonnull final AkanBot bot) {
         this.bot = bot;
         logFolder = new File(new File("").getAbsolutePath().concat(File.separator + "logs"));
         if (logFolder.mkdir()) {
@@ -32,7 +34,7 @@ public final class Logger {
         updateFile();
     }
 
-    private void updateFile() {
+    private synchronized void updateFile() {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDateTime now = LocalDateTime.now();
         File tmp = new File(logFolder.getAbsolutePath().concat(File.separator + dtf.format(now) + "log.json"));
@@ -56,7 +58,7 @@ public final class Logger {
         }
     }
 
-    public synchronized void addLog(GuildMessageReceivedEvent event, final ICommand cmd) {
+    public synchronized void addLog(@Nonnull GuildMessageReceivedEvent event,@Nonnull final ICommand cmd) {
         updateFile();
         JSONArray array = new JSONArray();
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");

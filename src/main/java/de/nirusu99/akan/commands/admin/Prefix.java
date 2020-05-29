@@ -7,6 +7,7 @@ import de.nirusu99.akan.commands.ICommand;
 import de.nirusu99.akan.utils.Const;
 import org.kohsuke.MetaInfServices;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -23,7 +24,7 @@ public final class Prefix implements ICommand {
     private final static Pattern PATTERN = Pattern.compile("prefix " + Const.PREFIX_REGEX);
 
     @Override
-    public void run(CommandContext ctx) {
+    public void run(@Nonnull CommandContext ctx) {
         List<String> args = ctx.getArgs();
         if (args.size() != 1) {
             ctx.getChannel().sendTyping().queue(rep ->

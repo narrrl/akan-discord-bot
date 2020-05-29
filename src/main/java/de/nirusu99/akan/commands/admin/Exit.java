@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.User;
 import org.kohsuke.MetaInfServices;
 
+import javax.annotation.Nonnull;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -29,7 +30,7 @@ public final class Exit implements ICommand {
     }
 
     @Override
-    public void run(CommandContext cfx) {
+    public void run(@Nonnull CommandContext cfx) {
         if (AkanBot.userIsOwner(cfx.getAuthor())) {
             cfx.getChannel().sendMessage("bai bai!").queue();
             cfx.getChannel().sendMessage("<:megu:666743067755151360>").complete();

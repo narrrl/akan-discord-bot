@@ -7,6 +7,7 @@ import de.nirusu99.akan.images.Host;
 import de.nirusu99.akan.utils.Const;
 import org.kohsuke.MetaInfServices;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -24,7 +25,7 @@ public final class SearchTag implements ICommand {
             + Const.TAGS_REGEX + ")");
 
     @Override
-    public void run(CommandContext ctx) {
+    public void run(@Nonnull CommandContext ctx) {
         List<String> args = ctx.getArgs();
         if (args.size() != 2) {
             ctx.getChannel().sendTyping().queue(rep ->

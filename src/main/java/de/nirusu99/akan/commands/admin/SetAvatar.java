@@ -10,6 +10,7 @@ import net.dv8tion.jda.api.entities.SelfUser;
 import net.dv8tion.jda.api.entities.User;
 import org.kohsuke.MetaInfServices;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -30,7 +31,7 @@ public final class SetAvatar implements ICommand {
     private static final Pattern PATTERN = Pattern.compile("setavatar");
 
     @Override
-    public void run(CommandContext cfx) {
+    public void run(@Nonnull CommandContext cfx) {
         if(AkanBot.userIsOwner(cfx.getAuthor())) {
             List<Message.Attachment> attachment = cfx.getMessage().getAttachments();
             if (attachment.size() != 1) {

@@ -4,13 +4,17 @@
 https://discordapp.com/developers/applications
 - successReaction true if you want reaction upon command execution
 - prefix is the bot prefix
+- activity is the displayed activity message
+- activity type is the type of activity (playing|listening|watching)
 
 Your config should look like this:
 ```json
 {
     "token": "2D34Nad23zMwN2323zdas45y.Xsmsig.jo_dai2fwsx0Taadd2naz0_Nvw",
-    "prefix": "a!",
-    "successReaction": "false"
+    "successReaction":"true",
+    "prefix":"a!",
+    "activity":"a!help",
+    "activityType":"listening"
 }
 ```
 p.s. token is not real.

@@ -8,6 +8,7 @@ import de.nirusu99.akan.utils.EmoteConverter;
 import net.dv8tion.jda.api.entities.User;
 import org.kohsuke.MetaInfServices;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -24,7 +25,7 @@ public final class Rep implements ICommand {
     private final static Pattern PATTERN = Pattern.compile("rep( " + Const.REP_REGEX + ")?");
 
     @Override
-    public void run(CommandContext ctx) {
+    public void run(@Nonnull CommandContext ctx) {
         List<String> args = ctx.getArgs();
         if (args.isEmpty()) {
             ctx.getChannel().sendTyping().queue(rep ->

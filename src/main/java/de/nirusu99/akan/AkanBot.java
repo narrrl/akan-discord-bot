@@ -9,6 +9,8 @@ import de.nirusu99.akan.core.Logger;
 import javax.annotation.Nonnull;
 import javax.security.auth.login.LoginException;
 
+import de.nirusu99.akan.utils.ActivitySetter;
+import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
@@ -17,7 +19,9 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.sharding.DefaultShardManager;
 import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
+import net.dv8tion.jda.api.sharding.ShardManager;
 import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
@@ -30,63 +34,72 @@ public class AkanBot extends ListenerAdapter {
     private final Logger log;
     private String prefix;
 
-    AkanBot(final boolean sharding) throws LoginException {
-        conf = new Config();
+    AkanBot() throws LoginException {
+        conf = new Config(this);
         log = new Logger(this);
-        this.prefix = conf.getPrefix();
-        if (sharding) {
-            DefaultShardManagerBuilder.createDefault(conf.getToken())
-                    .setActivity(Activity.listening("a!help"))
-                    .setAutoReconnect(true)
-                    .setStatus(OnlineStatus.ONLINE)
-                    .addEventListeners(this).build();
-        } else {
-            JDABuilder.createDefault(conf.getToken())
-                    .setActivity(Activity.listening("a!help"))
-                    .setAutoReconnect(true)
-                    .setStatus(OnlineStatus.ONLINE)
-                    .addEventListeners(this).build();
-        }
+        this.prefix = conf.getValue("prefix");
+        DefaultShardManagerBuilder.createDefault(conf.getValue("token"))
+                .setAutoReconnect(true)
+                .setActivity(ActivitySetter.set(conf.getValue("activityType"), conf.getValue("activity"),
+                        this))
+                .setStatus(OnlineStatus.ONLINE)
+                .addEventListeners(this).build();
     }
 
 
     /**
      * Starts the bot
+     *
      * @param args ---
      */
     public static void main(String[] args) {
         try {
-            new AkanBot(true);
+            new AkanBot();
         } catch (LoginException e) {
             AkanBot.LOGGER.info(e.getMessage());
         }
     }
 
+    /**
+     * Checks if the bot should add a reaction after getting a command message.
+     * This boolean is in the config.json and gets parsed by {@link Config#withSuccessReaction}
+     * @return true/false
+     */
     public boolean withSuccessReaction() {
         return conf.withSuccessReaction();
     }
 
-    public void setSuccessReaction(boolean checkMark) {
-        conf.setCheckMark(checkMark);
+    /**
+     * Sets if the bot should add a reaction after getting a command message.
+     * checkMark gets written in the config.json in {@link Config#setSuccessReaction(boolean)}
+     * @param successReaction new boolean for successReactions
+     */
+    public void setSuccessReaction(boolean successReaction) {
+        conf.setSuccessReaction(successReaction);
     }
 
-    public void setPrefix(String prefix) {
+    /**
+     * Sets the prefix of the bot
+     * @param prefix the new prefix
+     */
+    public void setPrefix(@Nonnull final String prefix) {
+        conf.setPrefix(prefix);
         this.prefix = prefix;
+    }
+
+    public void setActivity(@Nonnull final String status, @Nonnull final String type) {
+        conf.setActivity(status,type);
     }
 
     public String getPrefix() {
         return prefix;
     }
 
-    public Logger getLog() {
-        return log;
-    }
-
     public void printInfo(final String info) {
         LOGGER.info(info);
     }
 
-    public static boolean userIsOwner(final User user) {
+    public static boolean userIsOwner(@Nonnull final User user) {
         for (String id : AkanBot.OWNERS) {
             if (user.getId().equals(id)) {
                 return true;
@@ -116,7 +129,7 @@ public class AkanBot extends ListenerAdapter {
                     if (withSuccessReaction()) {
                         event.getMessage().addReaction("ayayayhyper:567486942086692872").queue();
                     }
-                    cmd.run(new CommandContext(event, Arrays.asList(split).subList(1,split.length), this));
+                    cmd.run(new CommandContext(event, Arrays.asList(split).subList(1, split.length), this));
                 } catch (IllegalArgumentException e) {
                     event.getChannel().sendTyping().queue();
                     event.getChannel().sendMessage(e.getMessage()).complete();
@@ -125,12 +138,11 @@ public class AkanBot extends ListenerAdapter {
         }
     }
 
+
     @Override
     public void onReady(@Nonnull ReadyEvent event) {
         LOGGER.info("{} ready", event.getJDA().getSelfUser().getAsTag());
     }
-
-
 
 
 }

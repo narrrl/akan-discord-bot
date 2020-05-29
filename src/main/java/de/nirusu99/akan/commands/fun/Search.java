@@ -10,6 +10,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.User;
 import org.kohsuke.MetaInfServices;
 
+import javax.annotation.Nonnull;
 import java.awt.*;
 import java.util.Collection;
 import java.util.List;
@@ -30,7 +31,7 @@ public final class Search implements ICommand {
             + Const.INT_REGEX + ")?( " + Const.INT_REGEX + ")?");
 
     @Override
-    public void run(CommandContext cfx) {
+    public void run(@Nonnull CommandContext cfx) {
         List<String> args = cfx.getArgs();
         int amount;
         int page;

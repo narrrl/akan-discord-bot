@@ -1,5 +1,7 @@
 {
-  "token": "",
-  "prefix": "a!",
-  "successReaction": "false"
+  "activity":"a!help",
+  "prefix":"a!",
+  "successReaction":"true",
+  "activityType":"listening",
+  "token":""
 }

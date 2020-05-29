@@ -2,6 +2,8 @@ package de.nirusu99.akan.images;
 
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nonnull;
+
 public final class Image implements Comparable<Image> {
     private final String url;
     private final String previewUrl;
@@ -10,7 +12,8 @@ public final class Image implements Comparable<Image> {
     private final String id;
     private final Host host;
 
-    public Image(String url, String previewUrl, String[] tags, String source, String id, final Host host) {
+    public Image(@Nonnull String url,@Nonnull  String previewUrl,@Nonnull  String[] tags,@Nonnull  String source,
+                 @Nonnull  String id,@Nonnull  final Host host) {
         this.url = url;
         this.previewUrl = previewUrl;
         this.tags = tags;

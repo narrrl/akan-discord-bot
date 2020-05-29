@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 import org.jdom2.*;
 import org.jdom2.input.SAXBuilder;
 
+import javax.annotation.Nonnull;
+
 public enum Host {
     GELBOORU("https://gelbooru.com/","index.php?page=dapi&s=post&q=index", "", "&pid=","&tags=",
             "https://gelbooru.com/index.php?page=post&s=view&id=","file_url",
@@ -53,7 +55,7 @@ public enum Host {
         this.xmlNode = xmlNode;
     }
 
-    public String searchForAmount(String tags) {
+    public String searchForAmount(@Nonnull String tags) {
         Document doc = this.getDocument(tags);
         Element root = doc.getRootElement();
         if (Host.DANBOORU.equals(this)) {
@@ -75,7 +77,7 @@ public enum Host {
         throw new IllegalArgumentException("host " + value + " not found");
     }
 
-    public Collection<Image> searchForImages(final String tags, final int amount, final int page) {
+    public Collection<Image> searchForImages(@Nonnull final String tags, final int amount, final int page) {
         Document doc = this.getDocument(tags, page);
         Set<Image> images = new HashSet<>();
         Element rootElement = doc.getRootElement();
@@ -112,7 +114,7 @@ public enum Host {
         return images;
     }
 
-    public Document getDocument(final String tags, final int page) {
+    public Document getDocument(@Nonnull final String tags, final int page) {
         String url = this.home + this.post
                 + this.page + (page - 1)
                 + this.tags + tags;
@@ -126,7 +128,7 @@ public enum Host {
         return document;
     }
 
-    public Document getDocument(final String tags) {
+    public Document getDocument(@Nonnull final String tags) {
         String url = this.home + this.countSubpage + this.post
                 + this.tags + tags;
         SAXBuilder builder = new SAXBuilder();

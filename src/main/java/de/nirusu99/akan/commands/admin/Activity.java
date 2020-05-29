@@ -8,6 +8,7 @@ import de.nirusu99.akan.utils.ActivitySetter;
 import de.nirusu99.akan.utils.Const;
 import org.kohsuke.MetaInfServices;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -26,7 +27,7 @@ public final class Activity implements ICommand {
             .compile("activity (" + Const.ACTIVITY_TYPE_REGEX + ") " + Const.STATUS_REGEX);
 
     @Override
-    public void run(CommandContext ctx) {
+    public void run(@Nonnull CommandContext ctx) {
         if (AkanBot.userIsOwner(ctx.getAuthor())) {
             List<String> args = ctx.getArgs();
             if (args.size() < 2) {
@@ -36,7 +37,8 @@ public final class Activity implements ICommand {
             }
             StringBuilder status = new StringBuilder();
             args.subList(1, args.size()).forEach(i -> status.append(i).append(" "));
-            ActivitySetter.set(args.get(0), status.toString().substring(0,status.length() - 1), ctx.getEvent());
+            ctx.getShardManager().setActivity(ActivitySetter
+                    .set(args.get(0), status.toString().substring(0,status.length() - 1), ctx.getBot()));
             ctx.getChannel().sendTyping().queue(rep ->
                     ctx.getChannel().sendMessage("Updated activity!").queue());
         } else {
