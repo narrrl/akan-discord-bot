@@ -10,7 +10,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @MetaInfServices(ICommand.class)
-public class Resume implements ICommand {
+public final class Resume implements ICommand {
     private final static Pattern PATTERN = Pattern.compile("resume");
 
     @Override

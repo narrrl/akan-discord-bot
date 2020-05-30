@@ -9,7 +9,7 @@ import de.nirusu99.akan.core.PlayerManager;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Next implements ICommand {
+public final class Next implements ICommand {
     private final static Pattern PATTERN = Pattern.compile("next");
 
     @Override

@@ -10,7 +10,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @MetaInfServices(ICommand.class)
-public class Pause implements ICommand {
+public final class Pause implements ICommand {
     private final static Pattern PATTERN = Pattern.compile("pause");
 
     @Override

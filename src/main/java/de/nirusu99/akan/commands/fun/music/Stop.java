@@ -9,7 +9,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @MetaInfServices(ICommand.class)
-public class Stop implements ICommand {
+public final class Stop implements ICommand {
     private final static Pattern PATTERN = Pattern.compile("stop");
 
     @Override

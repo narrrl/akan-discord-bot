@@ -15,7 +15,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @MetaInfServices(ICommand.class)
-public class Volume implements ICommand {
+public final class Volume implements ICommand {
     private final static Pattern PATTERN = Pattern.compile("volume (" + Const.INT_REGEX + ")");
 
     @Override

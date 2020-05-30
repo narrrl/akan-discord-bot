@@ -11,7 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @MetaInfServices(ICommand.class)
-public class Playing implements ICommand {
+public final class Playing implements ICommand {
     private final static Pattern PATTERN = Pattern.compile("playing");
 
     @Override

@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 
 
 @MetaInfServices(ICommand.class)
-public class Play implements ICommand {
+public final class Play implements ICommand {
     private final static Pattern PATTERN = Pattern.compile("play (" + Const.LINK + ")");
 
     @Override

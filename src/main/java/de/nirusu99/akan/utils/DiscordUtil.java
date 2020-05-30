@@ -6,7 +6,7 @@ import net.dv8tion.jda.api.entities.VoiceChannel;
 
 import javax.annotation.Nonnull;
 
-public class DiscordUtil {
+public final class DiscordUtil {
 
     /**
      * Don't instantiate
