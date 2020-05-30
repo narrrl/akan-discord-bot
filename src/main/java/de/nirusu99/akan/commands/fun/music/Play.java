@@ -31,6 +31,14 @@ public final class Play implements ICommand {
             return;
         }
 
+        VoiceChannel botChannel = DiscordUtil.findVoiceChannel(ctx.getSelfMember());
+
+        if (botChannel != null && !botChannel.equals(channel)) {
+            ctx.getChannel().sendTyping().queue(rep ->
+                    ctx.getChannel().sendMessage("You must be in the same voice channel!").queue());
+            return;
+        }
+
         PlayerManager manager = PlayerManager.getInstance();
         manager.loadAndPlay(ctx, ctx.getArgs().get(0));
 
