@@ -10,11 +10,11 @@ public class GuildMusicManager {
     /**
      * Audio player for the guild.
      */
-    public final AudioPlayer player;
+    private final AudioPlayer player;
     /**
      * Track scheduler for the player.
      */
-    public final TrackScheduler scheduler;
+    private final TrackScheduler scheduler;
 
     /**
      * Creates a player and a track scheduler.
@@ -31,5 +31,13 @@ public class GuildMusicManager {
      */
     public AudioPlayerSendHandler getSendHandler() {
         return new AudioPlayerSendHandler(player);
+    }
+
+    public AudioPlayer getPlayer() {
+        return player;
+    }
+
+    public TrackScheduler getScheduler() {
+        return scheduler;
     }
 }

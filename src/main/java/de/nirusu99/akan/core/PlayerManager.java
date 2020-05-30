@@ -83,24 +83,24 @@ public class PlayerManager {
     }
 
     private void play(@Nonnull final GuildMusicManager musicManager, @Nonnull final AudioTrack track) {
-        musicManager.scheduler.queue(track);
+        musicManager.getScheduler().queue(track);
     }
 
     public void pause(@Nonnull final GuildMusicManager musicManager, final boolean pause) {
-        musicManager.player.setPaused(pause);
+        musicManager.getPlayer().setPaused(pause);
     }
 
     public void destroy(@Nonnull final Guild guild) {
-        musicManagers.get(guild.getIdLong()).player.destroy();
+        musicManagers.get(guild.getIdLong()).getPlayer().destroy();
         musicManagers.remove(guild.getIdLong());
     }
 
     public void next(@Nonnull final GuildMusicManager musicManager) {
-        musicManager.scheduler.nextTrack();
+        musicManager.getScheduler().nextTrack();
     }
 
     public AudioTrack getPlaying(@Nonnull final GuildMusicManager musicManager) {
-        return musicManager.player.getPlayingTrack();
+        return musicManager.getPlayer().getPlayingTrack();
     }
 
     public static synchronized PlayerManager getInstance() {

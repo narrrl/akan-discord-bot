@@ -16,14 +16,14 @@ public final class Next implements ICommand {
     public void run(CommandContext ctx) {
         PlayerManager manager = PlayerManager.getInstance();
         GuildMusicManager musicManager = manager.getGuildMusicManager(ctx.getGuild());
-        AudioTrack prev = musicManager.player.getPlayingTrack();
+        AudioTrack prev = musicManager.getPlayer().getPlayingTrack();
         if (prev == null) {
             ctx.getChannel().sendTyping().queue(rep ->
                     ctx.getChannel().sendMessage("Nothing is playing!").queue());
             return;
         }
         manager.next(musicManager);
-        AudioTrack next = musicManager.player.getPlayingTrack();
+        AudioTrack next = musicManager.getPlayer().getPlayingTrack();
         String prevText = prev.getInfo().author + " - " + prev.getInfo().title;
         String nextText = next != null ? next.getInfo().author + " - " + next.getInfo().title : "End of queue";
         ctx.getChannel().sendTyping().queue(rep ->

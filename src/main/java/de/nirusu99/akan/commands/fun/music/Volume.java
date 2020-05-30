@@ -45,7 +45,7 @@ public final class Volume implements ICommand {
             ctx.getBot().printInfo(e.getMessage());
             return;
         }
-        musicManager.player.setVolume(volume);
+        musicManager.getPlayer().setVolume(volume);
     }
 
     @Override
