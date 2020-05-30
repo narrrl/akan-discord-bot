@@ -12,8 +12,8 @@ public final class Image implements Comparable<Image> {
     private final String id;
     private final Host host;
 
-    public Image(@Nonnull String url,@Nonnull  String previewUrl,@Nonnull  String[] tags,@Nonnull  String source,
-                 @Nonnull  String id,@Nonnull  final Host host) {
+    public Image(@Nonnull String url, @Nonnull  String previewUrl, @Nonnull  String[] tags, @Nonnull  String source,
+                 @Nonnull  String id, @Nonnull  final Host host) {
         this.url = url;
         this.previewUrl = previewUrl;
         this.tags = tags;

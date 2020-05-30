@@ -45,12 +45,12 @@ public final class Config {
 
     public synchronized void setActivity(@Nonnull final String status, @Nonnull final String type) {
         write("activity", status);
-        write("activityType",type);
+        write("activityType", type);
     }
 
     public synchronized void write(@Nonnull final String key, @Nonnull final String value) {
         obj.remove(key);
-        obj.put(key,value);
+        obj.put(key, value);
         try {
             FileWriter writer = new FileWriter(file);
             writer.write(obj.toJSONString());

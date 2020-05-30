@@ -1,11 +1,9 @@
 package de.nirusu99.akan.commands.fun;
 
-import de.nirusu99.akan.AkanBot;
 import de.nirusu99.akan.commands.CommandContext;
 import de.nirusu99.akan.commands.ICommand;
 import de.nirusu99.akan.utils.Const;
 import de.nirusu99.akan.utils.EmoteConverter;
-import net.dv8tion.jda.api.entities.User;
 import org.kohsuke.MetaInfServices;
 
 import javax.annotation.Nonnull;
@@ -22,7 +20,7 @@ import java.util.regex.Pattern;
  */
 @MetaInfServices(ICommand.class)
 public final class Rep implements ICommand {
-    private final static Pattern PATTERN = Pattern.compile("rep( " + Const.REP_REGEX + ")?");
+    private static final Pattern PATTERN = Pattern.compile("rep( " + Const.REP_REGEX + ")?");
 
     @Override
     public void run(@Nonnull CommandContext ctx) {
@@ -35,7 +33,7 @@ public final class Rep implements ICommand {
         StringBuilder out = new StringBuilder();
         args.forEach(i -> out.append(i).append(" "));
         for (String str : EmoteConverter
-                .convertRegionalIndicators(out.substring(0,out.length() - 1)).split(" ", -1)) {
+                .convertRegionalIndicators(out.substring(0, out.length() - 1)).split(" ", -1)) {
             ctx.getChannel().sendTyping().queue(rep ->
                     ctx.getChannel().sendMessage(str).queue());
         }

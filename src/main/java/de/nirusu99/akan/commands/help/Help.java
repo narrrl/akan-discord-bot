@@ -3,12 +3,11 @@ package de.nirusu99.akan.commands.help;
 import de.nirusu99.akan.commands.CommandContext;
 import de.nirusu99.akan.commands.ICommand;
 import de.nirusu99.akan.commands.CommandBuilder;
-import de.nirusu99.akan.images.Host;
 import de.nirusu99.akan.utils.Const;
 import net.dv8tion.jda.api.EmbedBuilder;
 import org.kohsuke.MetaInfServices;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -32,7 +31,7 @@ public final class Help implements ICommand {
             StringBuilder out = new StringBuilder();
             CommandBuilder.getCommands().forEach(cmd -> out.append(cmd.getName()).append("\n"));
             EmbedBuilder emb = new EmbedBuilder();
-            emb.setTitle("All Commands:").setDescription(out.toString().substring(0,out.length() - 1))
+            emb.setTitle("All Commands:").setDescription(out.toString().substring(0, out.length() - 1))
                     .setThumbnail(cfx.getSelfUser().getAvatarUrl()).setColor(Color.PINK);
             cfx.getChannel().sendTyping().queue(rep ->
                     cfx.getChannel().sendMessage(emb.build()).queue());

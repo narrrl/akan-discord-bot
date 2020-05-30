@@ -2,53 +2,72 @@ package de.nirusu99.akan.images;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.*;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.Collection;
+import java.util.List;
+import java.util.Random;
+import org.jdom2.Content;
+import org.jdom2.JDOMException;
+import org.jdom2.Document;
+import org.jdom2.Element;
 import java.util.stream.Collectors;
-import org.jdom2.*;
 import org.jdom2.input.SAXBuilder;
 
 import javax.annotation.Nonnull;
 
+
+/**
+ * Not perfect but works
+ * TODO: Needs some rework
+ */
 public enum Host {
-    GELBOORU("https://gelbooru.com/","index.php?page=dapi&s=post&q=index", "", "&pid=","&tags=",
-            "https://gelbooru.com/index.php?page=post&s=view&id=","file_url",
-            "peview_url","source","tags","id", Host.ATTRIBUTE),
-    SAFEBOORU("https://safebooru.org/", "index.php?page=dapi&s=post&q=index", "", "&pid=","&tags=",
-            "https://safebooru.org/index.php?page=post&s=view&id=","file_url",
-            "peview_url","source","tags","id", Host.ATTRIBUTE),
-    DANBOORU("https://danbooru.donmai.us/", "posts.xml?", "counts/", "page=","&tags=",
-            "https://danbooru.donmai.us/posts/","large-file-url",
-            "preview-file-url","source","tag-string","id", Host.CHILD) {
+    /**
+     * Gelbooru Host
+     */
+    GELBOORU("https://gelbooru.com/", "index.php?page=dapi&s=post&q=index", "", "&pid=",
+            "&tags=", "https://gelbooru.com/index.php?page=post&s=view&id=", "file_url",
+            "peview_url", "source", "tags", "id", Host.ATTRIBUTE),
+    /**
+     * Safebooru Host
+     */
+    SAFEBOORU("https://safebooru.org/", "index.php?page=dapi&s=post&q=index", "", "&pid=",
+            "&tags=", "https://safebooru.org/index.php?page=post&s=view&id=", "file_url",
+            "peview_url", "source", "tags", "id", Host.ATTRIBUTE),
+    /**
+     * Danbooru Host
+     */
+    DANBOORU("https://danbooru.donmai.us/", "posts.xml?", "counts/", "page=", "&tags=",
+            "https://danbooru.donmai.us/posts/", "large-file-url",
+            "preview-file-url", "source", "tag-string", "id", Host.CHILD) {
     };
 
-    public final static String HOSTS_REGEX = Arrays.stream(Host.values()).map(Enum::toString)
-            .collect(Collectors.joining("|")).toLowerCase();
-    private final static String POST = "[Element: <post/>]";
-    private final static String CHILD = "child";
-    private final static String ATTRIBUTE = "attribute";
+    private static final  String POST = "[Element: <post/>]";
+    private static final  String CHILD = "child";
+    private static final String ATTRIBUTE = "attribute";
     private final String home;
     private final String post;
     private final String countSubpage;
     private final String page;
     private final String tags;
     private final String postUrl;
-    private final String source_urlQuery;
-    private final String preview_urlQuery;
+    private final String sourceUrlQuery;
+    private final String previewUrlQuery;
     private final String sourceQuery;
     private final String tagsQuery;
     private final String idQuery;
     private final String xmlNode;
 
-    Host(String home, String post, String countSubpage, String page, String tags, String postUrl, String source_urlQuery,
-         String preview_urlQuery, String sourceQuery, String tagsQuery, String idQuery, String xmlNode) {
+    Host(String home, String post, String countSubpage, String page, String tags, String postUrl, String sourceUrlQuery,
+         String previewUrlQuery, String sourceQuery, String tagsQuery, String idQuery, String xmlNode) {
         this.home = home;
         this.post = post;
         this.countSubpage = countSubpage;
         this.page = page;
         this.tags = tags;
         this.postUrl = postUrl;
-        this.source_urlQuery = source_urlQuery;
-        this.preview_urlQuery = preview_urlQuery;
+        this.sourceUrlQuery = sourceUrlQuery;
+        this.previewUrlQuery = previewUrlQuery;
         this.sourceQuery = sourceQuery;
         this.tagsQuery = tagsQuery;
         this.idQuery = idQuery;
@@ -94,17 +113,17 @@ public enum Host {
                 String[] tagsArray;
                 String id;
                 if (xmlNode.equals(ATTRIBUTE)) {
-                    fileUrl = ((Element) c).getAttributeValue(source_urlQuery);
-                    previewUrl = ((Element) c).getAttributeValue(preview_urlQuery);
+                    fileUrl = ((Element) c).getAttributeValue(sourceUrlQuery);
+                    previewUrl = ((Element) c).getAttributeValue(previewUrlQuery);
                     source = ((Element) c).getAttributeValue(sourceQuery);
                     tagsArray = ((Element) c).getAttributeValue(tagsQuery).split(" ");
                     id = ((Element) c).getAttributeValue(idQuery);
                 } else if (xmlNode.equals(CHILD)) {
-                    fileUrl = ((Element) c).getChild(source_urlQuery).getValue();
-                    previewUrl = ((Element) c).getChild(source_urlQuery).getValue();
-                    source = ((Element) c).getChild(source_urlQuery).getValue();
-                    tagsArray = ((Element) c).getChild(source_urlQuery).getValue().split(" ",-1);
-                    id = ((Element) c).getChild(source_urlQuery).getValue();
+                    fileUrl = ((Element) c).getChild(sourceUrlQuery).getValue();
+                    previewUrl = ((Element) c).getChild(sourceUrlQuery).getValue();
+                    source = ((Element) c).getChild(sourceUrlQuery).getValue();
+                    tagsArray = ((Element) c).getChild(sourceUrlQuery).getValue().split(" ", -1);
+                    id = ((Element) c).getChild(sourceUrlQuery).getValue();
                     images.add(new Image(fileUrl, previewUrl, tagsArray, source, id, this));
                 } else {
                     throw new IllegalArgumentException("Invalid xml node type");

@@ -1,24 +1,31 @@
 package de.nirusu99.akan.utils;
 
 import de.nirusu99.akan.AkanBot;
-import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Activity;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import net.dv8tion.jda.api.sharding.ShardManager;
 
 public enum ActivitySetter {
+    /**
+     * Returns the playing activity type
+     */
     PLAYING("playing") {
         @Override
         Activity setActivity(String input) {
             return Activity.playing(input);
         }
-    },LISTENING("listening") {
+    },
+    /**
+     * Returns the listening activity type
+     */
+    LISTENING("listening") {
         @Override
         Activity setActivity(String input) {
             return Activity.listening(input);
         }
-    },WATCHING("watching") {
+    },
+    /**
+     * Returns the watching activity type
+     */
+    WATCHING("watching") {
         @Override
         Activity setActivity(String input) {
             return Activity.watching(input);
@@ -41,5 +48,5 @@ public enum ActivitySetter {
         throw new IllegalArgumentException("invalid status type");
     }
 
-    abstract Activity setActivity(final String input);
+    abstract Activity setActivity(String input);
 }

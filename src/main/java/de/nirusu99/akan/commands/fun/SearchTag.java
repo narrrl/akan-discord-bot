@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
  */
 @MetaInfServices(ICommand.class)
 public final class SearchTag implements ICommand {
-    private final static Pattern PATTERN = Pattern.compile("searchtag (" + Host.HOSTS_REGEX + ") ("
+    private static final Pattern PATTERN = Pattern.compile("searchtag (" + Const.HOSTS_REGEX + ") ("
             + Const.TAGS_REGEX + ")");
 
     @Override
@@ -34,12 +34,14 @@ public final class SearchTag implements ICommand {
         }
         String tags = args.get(1);
         String amount = Host.getHost(args.get(0)).searchForAmount(tags);
-        if (amount == null) throw new IllegalArgumentException("Woops something went wrong");
+        if (amount == null) {
+            throw new IllegalArgumentException("Woops something went wrong");
+        }
         ctx.getChannel().sendTyping()
                 .queue(rep ->
                 ctx.getChannel().sendMessage("found " + amount
-                        .replace("\n","")
-                        .replace(" ","") + " pictures for tags: " + args.get(1))
+                        .replace("\n", "")
+                        .replace(" ", "") + " pictures for tags: " + args.get(1))
                         .queue(rep2 ->
                 ctx.getChannel().sendMessage("<:wink:642062516595195904>")
                         .queue()));
@@ -52,7 +54,7 @@ public final class SearchTag implements ICommand {
 
     @Override
     public String syntax() {
-        return "<prefix>searchtag (" + Host.HOSTS_REGEX + ") <tag+tag+tag+...>";
+        return "<prefix>searchtag (" + Const.HOSTS_REGEX + ") <tag+tag+tag+...>";
     }
 
     @Override

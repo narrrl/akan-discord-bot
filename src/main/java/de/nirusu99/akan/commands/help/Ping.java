@@ -25,7 +25,6 @@ public final class Ping implements ICommand {
                 channel.sendMessage("Pong!").queue(response ->
                         response.editMessageFormat("Pong: %d ms <a:loading:529887640472911922>",
                                 ctx.getJDA().getGatewayPing()).queue()));
-        ;
     }
 
     @Override

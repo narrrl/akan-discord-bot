@@ -10,7 +10,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public final class Next implements ICommand {
-    private final static Pattern PATTERN = Pattern.compile("next");
+    private static final Pattern PATTERN = Pattern.compile("next");
 
     @Override
     public void run(CommandContext ctx) {

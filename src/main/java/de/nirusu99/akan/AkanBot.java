@@ -11,7 +11,8 @@ import javax.security.auth.login.LoginException;
 
 import de.nirusu99.akan.utils.ActivitySetter;
 import net.dv8tion.jda.api.OnlineStatus;
-import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -82,7 +83,7 @@ public class AkanBot extends ListenerAdapter {
     }
 
     public void setActivity(@Nonnull final String status, @Nonnull final String type) {
-        conf.setActivity(status,type);
+        conf.setActivity(status, type);
     }
 
     public String getPrefix() {

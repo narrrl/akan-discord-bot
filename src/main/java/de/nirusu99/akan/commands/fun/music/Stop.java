@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 
 @MetaInfServices(ICommand.class)
 public final class Stop implements ICommand {
-    private final static Pattern PATTERN = Pattern.compile("stop");
+    private static final Pattern PATTERN = Pattern.compile("stop");
 
     @Override
     public void run(CommandContext ctx) {

@@ -2,11 +2,10 @@ package de.nirusu99.akan.commands.help;
 
 import de.nirusu99.akan.commands.CommandContext;
 import de.nirusu99.akan.commands.ICommand;
-import de.nirusu99.akan.images.Host;
 import net.dv8tion.jda.api.EmbedBuilder;
 import org.kohsuke.MetaInfServices;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -24,7 +23,8 @@ public final class BotInvite implements ICommand {
     public void run(CommandContext ctx) {
         final EmbedBuilder emb = new EmbedBuilder();
         emb.setTitle("Invite Akan to your Server", "https://discordapp.com/oauth2/authorize?&client_id="
-                + ctx.getJDA().getSelfUser().getId() + "&scope=bot&permissions=8").setThumbnail(ctx.getJDA().getSelfUser().getEffectiveAvatarUrl())
+                + ctx.getJDA().getSelfUser().getId() + "&scope=bot&permissions=8")
+                .setThumbnail(ctx.getJDA().getSelfUser().getEffectiveAvatarUrl())
                 .setDescription("See you soon, master!").setColor(Color.PINK);
         ctx.getChannel().sendTyping().queue(rep ->
                 ctx.getChannel().sendMessage(emb.build()).queue());

@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 
 @MetaInfServices(ICommand.class)
 public final class Resume implements ICommand {
-    private final static Pattern PATTERN = Pattern.compile("resume");
+    private static final Pattern PATTERN = Pattern.compile("resume");
 
     @Override
     public void run(CommandContext ctx) {

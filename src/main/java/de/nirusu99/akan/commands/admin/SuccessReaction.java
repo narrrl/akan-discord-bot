@@ -25,7 +25,7 @@ import java.util.regex.Pattern;
  */
 @MetaInfServices(ICommand.class)
 public final class SuccessReaction implements ICommand {
-    private final static Pattern PATTERN = Pattern.compile("successreaction (" + Const.BOOLEAN_REGEX + ")");
+    private static final Pattern PATTERN = Pattern.compile("successreaction (" + Const.BOOLEAN_REGEX + ")");
 
     @Override
     public void run(@Nonnull CommandContext ctx) {

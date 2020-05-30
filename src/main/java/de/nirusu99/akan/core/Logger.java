@@ -56,7 +56,7 @@ public final class Logger {
         }
     }
 
-    public synchronized void addLog(@Nonnull GuildMessageReceivedEvent event,@Nonnull final ICommand cmd) {
+    public synchronized void addLog(@Nonnull GuildMessageReceivedEvent event, @Nonnull final ICommand cmd) {
         updateFile();
         JSONArray array = new JSONArray();
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -66,7 +66,7 @@ public final class Logger {
         array.add(cmd.getName());
         array.add(String.valueOf(event.getGuild()));
         array.add(event.getChannel().getName());
-        obj.put(dtf.format(now),array);
+        obj.put(dtf.format(now), array);
         try {
             if (!file.canWrite()) {
                 bot.printInfo("Logger: Couldn't write log.json");

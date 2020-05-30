@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
  */
 @MetaInfServices(ICommand.class)
 public final class Activity implements ICommand {
-    private final static Pattern PATTERN = Pattern
+    private static final Pattern PATTERN = Pattern
             .compile("activity (" + Const.ACTIVITY_TYPE_REGEX + ") " + Const.STATUS_REGEX);
 
     @Override
@@ -38,7 +38,7 @@ public final class Activity implements ICommand {
             StringBuilder status = new StringBuilder();
             args.subList(1, args.size()).forEach(i -> status.append(i).append(" "));
             ctx.getShardManager().setActivity(ActivitySetter
-                    .set(args.get(0), status.toString().substring(0,status.length() - 1), ctx.getBot()));
+                    .set(args.get(0), status.toString().substring(0, status.length() - 1), ctx.getBot()));
             ctx.getChannel().sendTyping().queue(rep ->
                     ctx.getChannel().sendMessage("Updated activity!").queue());
         } else {

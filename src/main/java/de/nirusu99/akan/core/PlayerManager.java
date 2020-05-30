@@ -21,7 +21,7 @@ import java.util.Map;
  * @version 1.2
  */
 public class PlayerManager {
-    private static PlayerManager INSTANCE;
+    private static PlayerManager instance;
     private final AudioPlayerManager playerManager;
     private final Map<Long, GuildMusicManager> musicManagers;
 
@@ -48,7 +48,7 @@ public class PlayerManager {
     }
 
 
-    public void loadAndPlay(@Nonnull final CommandContext ctx,@Nonnull  String trackUrl) {
+    public void loadAndPlay(@Nonnull final CommandContext ctx, @Nonnull  String trackUrl) {
         GuildMusicManager musicManager = getGuildMusicManager(ctx.getGuild());
 
         playerManager.loadItemOrdered(musicManager, trackUrl, new AudioLoadResultHandler() {
@@ -82,11 +82,11 @@ public class PlayerManager {
         });
     }
 
-    private void play(@Nonnull final GuildMusicManager musicManager,@Nonnull final AudioTrack track) {
+    private void play(@Nonnull final GuildMusicManager musicManager, @Nonnull final AudioTrack track) {
         musicManager.scheduler.queue(track);
     }
 
-    public void pause(@Nonnull final GuildMusicManager musicManager,final boolean pause) {
+    public void pause(@Nonnull final GuildMusicManager musicManager, final boolean pause) {
         musicManager.player.setPaused(pause);
     }
 
@@ -104,10 +104,10 @@ public class PlayerManager {
     }
 
     public static synchronized PlayerManager getInstance() {
-        if (INSTANCE == null) {
-            INSTANCE = new PlayerManager();
+        if (instance == null) {
+            instance = new PlayerManager();
         }
 
-        return INSTANCE;
+        return instance;
     }
 }

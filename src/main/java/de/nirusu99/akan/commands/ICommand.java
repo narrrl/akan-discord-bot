@@ -17,5 +17,5 @@ public interface ICommand {
 
     String gifHelpUrl();
 
-    Matcher matches(final String input);
+    Matcher matches(String input);
 }

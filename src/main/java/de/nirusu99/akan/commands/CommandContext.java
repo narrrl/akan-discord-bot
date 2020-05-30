@@ -13,7 +13,7 @@ public class CommandContext implements ICommandContext {
     private final List<String> args;
     private final AkanBot bot;
 
-    public CommandContext(@Nonnull final GuildMessageReceivedEvent event,@Nonnull  final List<String> args,
+    public CommandContext(@Nonnull final GuildMessageReceivedEvent event, @Nonnull  final List<String> args,
                           @Nonnull  final AkanBot bot) {
         this.event = event;
         this.args = args;

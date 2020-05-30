@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 
 @MetaInfServices(ICommand.class)
 public final class Pause implements ICommand {
-    private final static Pattern PATTERN = Pattern.compile("pause");
+    private static final Pattern PATTERN = Pattern.compile("pause");
 
     @Override
     public void run(CommandContext ctx) {

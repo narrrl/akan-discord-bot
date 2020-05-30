@@ -3,8 +3,10 @@ package de.nirusu99.akan.commands;
 import java.util.ServiceLoader;
 import java.util.regex.Matcher;
 
-public class CommandBuilder {
-    private CommandBuilder() {throw new IllegalAccessError();}
+public final class CommandBuilder {
+    private CommandBuilder() {
+        throw new IllegalAccessError();
+    }
 
     /**
      * Finds the {@link ICommand} that matches the input and returns its.

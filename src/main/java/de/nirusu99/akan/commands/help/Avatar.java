@@ -7,7 +7,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import org.kohsuke.MetaInfServices;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -27,7 +27,7 @@ public final class Avatar  implements ICommand {
         List<Member> users = ctx.getMessage().getMentionedMembers();
         for (Member m : users) {
             final EmbedBuilder emb = new EmbedBuilder();
-            emb.setTitle(m.getUser().getAsTag(),m.getUser().getAvatarUrl())
+            emb.setTitle(m.getUser().getAsTag(), m.getUser().getAvatarUrl())
                     .setImage(m.getUser().getEffectiveAvatarUrl() + "?size=512")
             .setColor(Color.PINK);
             ctx.getChannel().sendTyping().queue(rep ->

@@ -6,7 +6,6 @@ import de.nirusu99.akan.commands.ICommand;
 import de.nirusu99.akan.commands.Error;
 import net.dv8tion.jda.api.entities.Icon;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.SelfUser;
 import net.dv8tion.jda.api.entities.User;
 import org.kohsuke.MetaInfServices;
 
@@ -32,7 +31,7 @@ public final class SetAvatar implements ICommand {
 
     @Override
     public void run(@Nonnull CommandContext cfx) {
-        if(AkanBot.userIsOwner(cfx.getAuthor())) {
+        if (AkanBot.userIsOwner(cfx.getAuthor())) {
             List<Message.Attachment> attachment = cfx.getMessage().getAttachments();
             if (attachment.size() != 1) {
                 cfx.getChannel().sendTyping().queue(rep ->
@@ -42,7 +41,7 @@ public final class SetAvatar implements ICommand {
             try {
                 InputStream s = new URL(attachment.get(0).getUrl()).openStream();
                 cfx.getJDA().getSelfUser().getManager().setAvatar(Icon.from(s)).queue(rep ->
-                        cfx.getChannel().sendTyping().queue( msg ->
+                        cfx.getChannel().sendTyping().queue(msg ->
                                 cfx.getChannel().sendMessage("updated avatar!").queue()));
             } catch (IOException e) {
                 throw new IllegalArgumentException(e.getMessage());
