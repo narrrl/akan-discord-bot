@@ -43,7 +43,7 @@ public final class Help implements ICommand {
                 emb.setTitle(cmd.getName())
                         .setThumbnail(cfx.getGuild().getIconUrl())
                         .setDescription("**Description**:\n" + cmd.toString()
-                                + LINE_BREAK + "**Syntax**:\n" + cmd.syntax())
+                                + LINE_BREAK + "\n\n**Syntax**:\n" + cmd.syntax())
                         .setImage(cmd.gifHelpUrl())
                         .setColor(Color.PINK);
                 cfx.getChannel().sendTyping().queue(rep ->
