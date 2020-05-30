@@ -66,6 +66,6 @@ public final class SuccessReaction implements ICommand {
 
     @Override
     public String toString() {
-        return "reacts to your message when command gets executed";
+        return "The bot adds a reaction to executed commands if set to true";
     }
 }

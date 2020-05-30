@@ -37,7 +37,7 @@ public final class BotInvite implements ICommand {
 
     @Override
     public String toString() {
-        return "Sends the invite-link for the bot";
+        return "Sends the invite link for the bot";
     }
 
     @Override

@@ -34,6 +34,11 @@ public final class Ping implements ICommand {
     }
 
     @Override
+    public String toString() {
+        return "Gets the current bot ping to the Discord gateway. Useful to test the bot :)";
+    }
+
+    @Override
     public String syntax() {
         return "<prefix>ping";
     }

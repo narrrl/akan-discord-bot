@@ -52,7 +52,7 @@ public final class Exit implements ICommand {
 
     @Override
     public String toString() {
-        return "exits the bot";
+        return "Exits the bot";
     }
 
     @Override

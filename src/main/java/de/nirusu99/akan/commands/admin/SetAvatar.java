@@ -59,6 +59,11 @@ public final class SetAvatar implements ICommand {
     }
 
     @Override
+    public String toString() {
+        return "Sets the avatar of the bot. You have to attach a picture to the message!";
+    }
+
+    @Override
     public String syntax() {
         return null;
     }

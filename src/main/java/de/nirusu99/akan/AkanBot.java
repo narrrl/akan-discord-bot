@@ -1,13 +1,8 @@
 package de.nirusu99.akan;
 
-import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
-import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
-import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
-import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import de.nirusu99.akan.commands.CommandContext;
 import de.nirusu99.akan.commands.ICommand;
 import de.nirusu99.akan.commands.CommandBuilder;
-import de.nirusu99.akan.core.AudioInstance;
 import de.nirusu99.akan.core.Config;
 import de.nirusu99.akan.core.Logger;
 
@@ -16,9 +11,7 @@ import javax.security.auth.login.LoginException;
 
 import de.nirusu99.akan.utils.ActivitySetter;
 import net.dv8tion.jda.api.OnlineStatus;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -26,7 +19,6 @@ import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
 import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
-import java.util.HashMap;
 
 public class AkanBot extends ListenerAdapter {
 
@@ -34,17 +26,12 @@ public class AkanBot extends ListenerAdapter {
     private static final String[] OWNERS = {"208979474988007425", "244607816587935746"};
     private final Config conf;
     private final Logger log;
-    private final AudioPlayerManager playerManager;
-    private final HashMap<Guild, AudioInstance> players;
     private String prefix;
 
     AkanBot() throws LoginException {
-        players = new HashMap<>();
         conf = new Config(this);
         log = new Logger(this);
         this.prefix = conf.getValue("prefix");
-        playerManager = new DefaultAudioPlayerManager();
-        AudioSourceManagers.registerRemoteSources(playerManager);
         DefaultShardManagerBuilder.createDefault(conf.getValue("token"))
                 .setAutoReconnect(true)
                 .setActivity(ActivitySetter.set(conf.getValue("activityType"), conf.getValue("activity"),
@@ -102,14 +89,6 @@ public class AkanBot extends ListenerAdapter {
         return prefix;
     }
 
-    public HashMap<Guild, AudioInstance> getPlayers() {
-        return players;
-    }
-
-    public AudioPlayerManager getPlayerManager() {
-        return playerManager;
-    }
-
     public void printInfo(final String info) {
         LOGGER.info(info);
     }
@@ -157,10 +136,5 @@ public class AkanBot extends ListenerAdapter {
     @Override
     public void onReady(@Nonnull ReadyEvent event) {
         LOGGER.info("{} ready", event.getJDA().getSelfUser().getAsTag());
-    }
-
-
-    public AudioInstance getAudioInstance(Guild guild) {
-        return this.players.get(guild);
     }
 }

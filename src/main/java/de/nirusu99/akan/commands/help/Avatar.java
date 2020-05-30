@@ -53,7 +53,7 @@ public final class Avatar  implements ICommand {
 
     @Override
     public String toString() {
-        return "Gets the avatar of the specified user";
+        return "Gets the avatar of the specified users";
     }
 
     @Override

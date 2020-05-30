@@ -61,6 +61,11 @@ public final class SearchTag implements ICommand {
     }
 
     @Override
+    public String toString() {
+        return "Searches for the number of posts for given tags on Gelbooru, Danbooru or Sagebooru";
+    }
+
+    @Override
     public Matcher matches(final String input) {
         return PATTERN.matcher(input);
     }

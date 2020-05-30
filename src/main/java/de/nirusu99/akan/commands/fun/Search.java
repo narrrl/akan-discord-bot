@@ -89,7 +89,7 @@ public final class Search implements ICommand {
 
     @Override
     public String toString() {
-        return "Searches images by tags on Gelbooru";
+        return "Searches images by tags on Gelbooru, Danbooru or Safebooru";
     }
 
     @Override
