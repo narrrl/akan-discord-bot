@@ -48,11 +48,11 @@ public class Delete implements ICommand {
             try {
                 amount = Integer.parseInt(args.get(0));
             } catch (NumberFormatException e) {
-                amount = 100;
+                amount = 99;
             }
         }
+        amount++;
         if (targets.isEmpty()) {
-            ctx.getMessage().delete().queue();
             channel.getHistory().retrievePast(amount).complete().forEach(msg -> msg.delete().queue());
             return;
         }
@@ -62,7 +62,6 @@ public class Delete implements ICommand {
                     ctx.getChannel().sendMessage("invalid user!").queue());
             return;
         }
-        ctx.getMessage().delete().queue();
         channel.getHistory().retrievePast(amount).complete().forEach(msg -> {
             if (msg.getAuthor().getIdLong() == target.getIdLong()) {
                 msg.delete().queue();
