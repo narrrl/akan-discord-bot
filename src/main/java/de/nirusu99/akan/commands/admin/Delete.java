@@ -6,7 +6,6 @@ import de.nirusu99.akan.commands.ICommand;
 import de.nirusu99.akan.utils.Const;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import org.kohsuke.MetaInfServices;
 
@@ -14,6 +13,14 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * This {@link ICommand} deletes a given amount of message of any or a specific user.
+ * The {@link CommandContext#getArgs()} must return 0 or up to 2 elements.
+ * The amount can be left blank, the default is the maximum of 100.
+ *
+ * @author Nils Pukropp
+ * @since 1.2
+ */
 @MetaInfServices(ICommand.class)
 public class Delete implements ICommand {
     private static final Pattern PATTERN = Pattern.compile("delete( " + Const.USER_REGEX
@@ -37,6 +44,7 @@ public class Delete implements ICommand {
         if (args.size() == 2) {
             amount = Integer.parseInt(args.get(1));
         } else {
+            // not very beautiful xD
             try {
                 amount = Integer.parseInt(args.get(0));
             } catch (NumberFormatException e) {
@@ -44,6 +52,7 @@ public class Delete implements ICommand {
             }
         }
         if (targets.isEmpty()) {
+            ctx.getMessage().delete().queue();
             channel.getHistory().retrievePast(amount).complete().forEach(msg -> msg.delete().queue());
             return;
         }
@@ -53,6 +62,7 @@ public class Delete implements ICommand {
                     ctx.getChannel().sendMessage("invalid user!").queue());
             return;
         }
+        ctx.getMessage().delete().queue();
         channel.getHistory().retrievePast(amount).complete().forEach(msg -> {
             if (msg.getAuthor().getIdLong() == target.getIdLong()) {
                 msg.delete().queue();
