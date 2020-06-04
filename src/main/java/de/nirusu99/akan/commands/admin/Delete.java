@@ -43,17 +43,18 @@ public class Delete implements ICommand {
         final List<Member> targets = ctx.getMessage().getMentionedMembers();
         if (args.size() == 2) {
             amount = Integer.parseInt(args.get(1));
+        } else if (args.size() == 1 && targets.isEmpty()) {
+            amount = Integer.parseInt(args.get(0));
         } else {
-            // not very beautiful xD
-            try {
-                amount = Integer.parseInt(args.get(0));
-            } catch (NumberFormatException e) {
-                amount = 99;
-            }
+            amount = 99;
         }
         amount++;
         if (targets.isEmpty()) {
-            channel.getHistory().retrievePast(amount).complete().forEach(msg -> msg.delete().queue());
+            channel.getHistory().retrievePast(amount).complete().forEach(msg -> {
+                if (msg != null) {
+                    msg.delete().queue();
+                }
+            });
             return;
         }
         final Member target = targets.get(0);
@@ -63,8 +64,10 @@ public class Delete implements ICommand {
             return;
         }
         channel.getHistory().retrievePast(amount).complete().forEach(msg -> {
-            if (msg.getAuthor().getIdLong() == target.getIdLong()) {
-                msg.delete().queue();
+            if (msg != null) {
+                if (msg.getAuthor().getIdLong() == target.getIdLong()) {
+                    msg.delete().queue();
+                }
             }
         });
     }

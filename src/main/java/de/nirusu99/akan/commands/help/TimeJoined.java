@@ -33,7 +33,7 @@ public class TimeJoined implements ICommand {
 
     @Override
     public String getName() {
-        return "";
+        return "joined";
     }
 
     @Override
