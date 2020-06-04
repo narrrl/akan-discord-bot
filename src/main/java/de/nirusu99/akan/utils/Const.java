@@ -15,7 +15,7 @@ public final class Const {
     /**
      * regex for a user
      */
-    public static final String USER_REGEX = "<@![0-9]{18}>";
+    public static final String USER_REGEX = "<@(!)?[0-9]{18}>";
 
     /**
      * linebreak const

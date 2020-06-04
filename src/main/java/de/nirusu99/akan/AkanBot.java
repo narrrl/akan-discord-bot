@@ -110,7 +110,9 @@ public class AkanBot extends ListenerAdapter {
             return;
         }
         Message msg = event.getMessage();
-        if (msg.getContentRaw().startsWith(this.prefix)) {
+        String content = msg.getContentRaw();
+        if (content.startsWith(this.prefix)
+                && content.length() > this.prefix.length()) {
             String contentRaw = msg.getContentRaw().substring(this.prefix.length());
             ICommand cmd = CommandBuilder.createCommand(contentRaw);
             if (cmd == null) {
@@ -126,8 +128,9 @@ public class AkanBot extends ListenerAdapter {
                     }
                     cmd.run(new CommandContext(event, Arrays.asList(split).subList(1, split.length), this));
                 } catch (IllegalArgumentException e) {
-                    event.getChannel().sendTyping().queue();
-                    event.getChannel().sendMessage(e.getMessage()).complete();
+                    event.getChannel().sendTyping().queue(rep ->
+                            event.getChannel().sendMessage(e.getMessage()).queue());
+
                 }
             }
         }
