@@ -15,27 +15,33 @@ import java.util.regex.Pattern;
 
 @MetaInfServices(ICommand.class)
 public final class Play implements ICommand {
-    private static final  Pattern PATTERN = Pattern.compile("play (" + Const.LINK + ")");
+    private static final  Pattern PATTERN = Pattern
+        .compile("play (" + Const.LINK + ")");
 
     @Override
     public void run(CommandContext ctx) {
         if (ctx.getArgs().size() != 1) {
-            throw new IllegalArgumentException(Error.INVALID_ARGUMENTS.toString());
+            throw new IllegalArgumentException(Error.
+                    INVALID_ARGUMENTS.toString());
         }
 
         VoiceChannel channel = DiscordUtil.findVoiceChannel(ctx.getMember());
 
         if (channel == null) {
             ctx.getChannel().sendTyping().queue(rep ->
-                    ctx.getChannel().sendMessage("You must be in a voice channel!").queue());
+                    ctx.getChannel()
+                    .sendMessage("You must be in a voice channel!").queue());
             return;
         }
 
-        VoiceChannel botChannel = DiscordUtil.findVoiceChannel(ctx.getSelfMember());
+        VoiceChannel botChannel = DiscordUtil.findVoiceChannel(ctx
+                .getSelfMember());
 
         if (botChannel != null && !botChannel.equals(channel)) {
             ctx.getChannel().sendTyping().queue(rep ->
-                    ctx.getChannel().sendMessage("You must be in the same voice channel!").queue());
+                    ctx.getChannel()
+                    .sendMessage("You must be in the same voice channel!")
+                    .queue());
             return;
         }
 
@@ -65,7 +71,8 @@ public final class Play implements ICommand {
 
     @Override
     public String toString() {
-        return "Plays a song from a given source.\nSources are:\n\nYouTube\nTwitch\nSoundcloud\nVimo";
+        return "Plays a song from a given source.\n\nSources are:\n"
+            + "YouTube\nTwitch\nSoundcloud\nVimo";
     }
 
     @Override
