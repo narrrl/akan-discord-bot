@@ -45,6 +45,7 @@ public final class Volume implements ICommand {
             ctx.getBot().printInfo(e.getMessage());
             return;
         }
+        ctx.getBot().getLogger().setVolume(ctx.getGuild().getIdLong(), volume);
         musicManager.getPlayer().setVolume(volume);
     }
 

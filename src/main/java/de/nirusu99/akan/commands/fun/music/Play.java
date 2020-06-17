@@ -42,7 +42,8 @@ public final class Play implements ICommand {
         PlayerManager manager = PlayerManager.getInstance();
         manager.loadAndPlay(ctx, ctx.getArgs().get(0));
 
-        manager.getGuildMusicManager(ctx.getGuild());
+        manager.getGuildMusicManager(ctx.getGuild()).getPlayer()
+                .setVolume(ctx.getBot().getLogger().getVolume(ctx.getGuild().getIdLong()));
 
         ctx.getGuild().getAudioManager().openAudioConnection(channel);
     }

@@ -86,6 +86,10 @@ public class AkanBot extends ListenerAdapter {
         conf.setActivity(status, type);
     }
 
+    public Logger getLogger() {
+        return this.log;
+    }
+
     public String getPrefix() {
         return prefix;
     }

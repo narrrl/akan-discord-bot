@@ -31,7 +31,7 @@ public final class Config {
         return (String) obj.get(key);
     }
 
-    public synchronized boolean withSuccessReaction() {
+    public boolean withSuccessReaction() {
         return Boolean.parseBoolean((String) obj.get("successReaction"));
     }
 
