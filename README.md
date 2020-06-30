@@ -5,8 +5,37 @@ don't expect high quality code or unique features.
 You can download and edit the bot however you want.
 
 #### Installation
-If you just want to use this bot as it is visit 
-[releases](https://github.com/Nirusu99/akan-discord-bot/tree/master/release)
+Clone the repo and run `gradle build` and than go to `build/libs/`. You will find a `akan-discord-bot-{$VERSION}-all.jar`. Copy this, and the `config.json` from `src/main/resources/` into one folder (anywhere on your computer).
+Now execute `java -jar akan-discord-bot-{$VERSION}-all.jar` inside the directory with the jar and the config.
+Don't forget to put your bot-token into the config! And __NEVER__ share the bot-token with anyone!
+
+The config shoulde look something like this:
+
+```
+{
+  "activity":"a!help",
+  "prefix":"a!",
+  "successReaction":"true",
+  "activityType":"listening",
+  "token":"YOUR BOT TOKEN"
+}
+```
+
+The bot directory should look like this:
+```
+bot-directory
+    ├── akan-discord-bot-1.2-all.jar
+    └── config.json
+```
+
+The bot will create a log directory on the first start:
+```
+bot-directory
+    ├── akan-discord-bot-1.2-all.jar
+    ├── config.json
+    └── logs
+        └── YYYY-MM-DDlog.json
+```
 
 #### Contact
 
