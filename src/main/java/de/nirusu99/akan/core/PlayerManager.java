@@ -99,6 +99,11 @@ public class PlayerManager {
         musicManager.getScheduler().nextTrack();
     }
 
+    public void shuffle(@Nonnull final GuildMusicManager musicManager) {
+        musicManager.getScheduler().shuffle();
+
+    }
+
     public AudioTrack getPlaying(@Nonnull final GuildMusicManager musicManager) {
         return musicManager.getPlayer().getPlayingTrack();
     }
