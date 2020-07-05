@@ -9,6 +9,8 @@ import java.util.ArrayList;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.List;
+import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 
 /**
  * This class schedules tracks for the audio player. It contains the queue of tracks.
@@ -52,6 +54,16 @@ public class TrackScheduler extends AudioEventAdapter {
         }
 
 
+    }
+
+    public synchronized ArrayList<AudioTrackInfo> getAllTrackInfos() {
+        ArrayList<AudioTrackInfo> tmp = new ArrayList<>();
+
+        for (Object o : queue.toArray()) {
+            tmp.add(((AudioTrack) o).getInfo());
+        }
+
+        return tmp;
     }
 
     /**

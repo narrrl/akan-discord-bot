@@ -1,6 +1,5 @@
 package de.nirusu99.akan.commands.fun.music;
 
-import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import de.nirusu99.akan.commands.CommandContext;
 import de.nirusu99.akan.commands.ICommand;
 import de.nirusu99.akan.core.GuildMusicManager;
@@ -18,6 +17,13 @@ public final class Shuffle implements ICommand {
     public void run(CommandContext ctx) {
         PlayerManager manager = PlayerManager.getInstance();
         GuildMusicManager musicManager = manager.getGuildMusicManager(ctx.getGuild());
+
+        if (musicManager.getPlayer().getPlayingTrack() == null) {
+            ctx.getChannel().sendTyping().queue(rep ->
+                    ctx.getChannel().sendMessage("No music is playing!").queue());
+            return;
+        }
+
         manager.shuffle(musicManager);
         ctx.getChannel().sendTyping().queue(rep ->
                 ctx.getChannel().sendMessage("Shuffled queue!").queue());

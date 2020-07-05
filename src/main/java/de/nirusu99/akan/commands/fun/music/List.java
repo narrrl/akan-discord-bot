@@ -11,11 +11,12 @@ import net.dv8tion.jda.api.EmbedBuilder;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.ArrayList;
 import java.awt.Color;
 
 @MetaInfServices(ICommand.class)
-public final class Playing implements ICommand {
-    private static final Pattern PATTERN = Pattern.compile("playing");
+public final class List implements ICommand {
+    private static final Pattern PATTERN = Pattern.compile("list");
 
     @Override
     public void run(CommandContext ctx) {
@@ -30,12 +31,46 @@ public final class Playing implements ICommand {
         }
 
         EmbedBuilder emb = new EmbedBuilder();
-        AudioTrackInfo info = track.getInfo();
         emb.setColor(Color.PINK).setThumbnail(ctx.getGuild().getIconUrl())
-            .setTitle("Now playing:", info.uri)
-            .setDescription(info.author + " - " + info.title);
-        ctx.getChannel().sendTyping().queue(rep ->
-                ctx.getChannel().sendMessage(emb.build()).queue());
+            .setTitle("Current Queue:");
+
+        ArrayList<AudioTrackInfo> tracks = musicManager.getScheduler()
+            .getAllTrackInfos();
+
+        StringBuilder out = new StringBuilder();
+
+        out.append("Current: [" + track.getInfo().title + "](" + track.getInfo().uri
+                + ")\n");
+
+        int it = 1;
+
+        int totalEmbs = 0;
+
+        for (AudioTrackInfo i : tracks) {
+
+            if (totalEmbs == 2) break;
+
+            out.append(it + ": [" + i.title + "](" + i.uri + ")\n");
+
+            if (out.length() > 1800) {
+
+                emb.setDescription(out.toString().substring(0, out.length()));
+                ctx.getChannel().sendMessage(emb.build()).queue();
+                out = new StringBuilder();
+
+                totalEmbs++;
+
+            }
+
+            it++;
+        }
+
+       if (out.length() != 0) {
+           emb.setDescription(out.toString().substring(0, out.length()));
+           ctx.getChannel().sendMessage(emb.build()).queue();
+
+       }
+
     }
 
     @Override
