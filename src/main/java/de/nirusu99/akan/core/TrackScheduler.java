@@ -9,7 +9,6 @@ import java.util.ArrayList;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.List;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 
 /**

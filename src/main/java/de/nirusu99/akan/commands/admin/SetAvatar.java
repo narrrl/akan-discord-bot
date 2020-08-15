@@ -6,7 +6,6 @@ import de.nirusu99.akan.commands.ICommand;
 import de.nirusu99.akan.commands.Error;
 import net.dv8tion.jda.api.entities.Icon;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.User;
 import org.kohsuke.MetaInfServices;
 
 import javax.annotation.Nonnull;

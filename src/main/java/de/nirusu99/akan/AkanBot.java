@@ -12,14 +12,20 @@ import javax.security.auth.login.LoginException;
 import de.nirusu99.akan.utils.ActivitySetter;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.events.user.UserActivityEndEvent;
+import net.dv8tion.jda.api.events.user.UserActivityStartEvent;
+import net.dv8tion.jda.api.events.user.update.UserUpdateOnlineStatusEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
 import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class AkanBot extends ListenerAdapter {
 
@@ -140,6 +146,71 @@ public class AkanBot extends ListenerAdapter {
         }
     }
 
+
+    @Override
+    public void onUserActivityStart(UserActivityStartEvent event) {
+
+        if (event.getGuild().getIdLong() == 406435979671502849L && event.getNewActivity().getType().equals(Activity.ActivityType.STREAMING)) {
+
+            List<Role> streamingRoles = event.getGuild().getRolesByName("STREAMING", true);
+
+            if (streamingRoles.size() > 0) {
+
+                event.getGuild().addRoleToMember(event.getMember(), streamingRoles.get(0));
+
+                printInfo(event.getMember().getEffectiveName() + " started streaming");
+            }
+        }
+
+    }
+
+    @Override
+    public void onUserActivityEnd(UserActivityEndEvent event) {
+
+        if (event.getGuild().getIdLong() == 406435979671502849L && event.getOldActivity().getType().equals(Activity.ActivityType.STREAMING)) {
+
+            List<Role> streamingRoles = event.getGuild().getRolesByName("STREAMING", true);
+
+            if (streamingRoles.size() > 0) {
+
+                event.getGuild().removeRoleFromMember(event.getMember(), streamingRoles.get(0));
+
+
+                printInfo(event.getMember().getEffectiveName() + " stopped streaming");
+            }
+        }
+
+    }
+
+    @Override
+    public void onUserUpdateOnlineStatus(UserUpdateOnlineStatusEvent event) {
+
+        if (event.getGuild().getIdLong() == 406435979671502849L && event.getMember().getActivities().size() > 0) {
+
+            if (event.getMember().getActivities().get(0).getType().equals(Activity.ActivityType.STREAMING)) {
+                List<Role> streamingRoles = event.getGuild().getRolesByName("STREAMING", true);
+
+                if (streamingRoles.size() > 0) {
+
+                    event.getGuild().addRoleToMember(event.getMember(), streamingRoles.get(0));
+
+                    printInfo(event.getMember().getEffectiveName() + " started streaming");
+                }
+            } else if (!event.getMember().getActivities().get(0).getType().equals(Activity.ActivityType.STREAMING)) {
+                List<Role> streamingRoles = event.getGuild().getRolesByName("STREAMING", true);
+
+                if (streamingRoles.size() > 0) {
+
+                    event.getGuild().removeRoleFromMember(event.getMember(), streamingRoles.get(0));
+
+
+                    printInfo(event.getMember().getEffectiveName() + " stopped streaming");
+                }
+
+            }
+        }
+
+    }
 
     @Override
     public void onReady(@Nonnull ReadyEvent event) {
