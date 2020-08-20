@@ -75,7 +75,7 @@ public final class List implements ICommand {
 
     @Override
     public String getName() {
-        return "playing";
+        return "list";
     }
 
     @Override
