@@ -183,19 +183,4 @@ public enum Host {
         }
         return images;
     }
-
-    //TODO: test main remove when everything works
-    public static void main(String[] args) {
-        Collection<Image> images;
-        try {
-            images = Host.getNekos("neko", 2);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return;
-        }
-
-        for (Image i : images) {
-            System.out.println(i.getUrl());
-        }
-    }
 }
