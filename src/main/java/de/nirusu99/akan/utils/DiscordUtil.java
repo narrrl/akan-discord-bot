@@ -19,4 +19,18 @@ public final class DiscordUtil {
         GuildVoiceState state = member.getVoiceState();
         return state != null ? state.getChannel() : null;
     }
+
+    public static boolean areInSameVoice(@Nonnull Member member1, @Nonnull Member member2) {
+        VoiceChannel channel = DiscordUtil.findVoiceChannel(member1);
+
+        if (channel == null) return false;
+
+        VoiceChannel botChannel = DiscordUtil.findVoiceChannel(member2);
+
+        if (!channel.equals(botChannel)) return false;
+
+        return true;
+    }
+
+
 }
