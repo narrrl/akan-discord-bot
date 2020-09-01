@@ -23,7 +23,7 @@ public final class Pause implements ICommand {
         }
         PlayerManager manager = PlayerManager.getInstance();
         GuildMusicManager musicManager = manager.getGuildMusicManager(ctx.getGuild());
-        manager.pause(musicManager, true);
+        manager.pause(musicManager, !musicManager.getPlayer().isPaused());
     }
 
     @Override
@@ -43,7 +43,7 @@ public final class Pause implements ICommand {
 
     @Override
     public String toString() {
-        return "Pauses the music bot";
+        return "toggle pause for the music bot";
     }
 
     @Override
