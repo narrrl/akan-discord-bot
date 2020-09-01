@@ -44,6 +44,9 @@ public final class Neko implements ICommand {
                 return;
             }
         }
+
+        amount = amount > 5 ? 5 : amount;
+
         try {
             images = Host.getNekos("neko", amount);
         } catch (IOException e) {
@@ -52,7 +55,6 @@ public final class Neko implements ICommand {
             return;
         }
 
-        amount = amount > 5 ? 5 : amount;
 
         EmbedBuilder emb;
 
