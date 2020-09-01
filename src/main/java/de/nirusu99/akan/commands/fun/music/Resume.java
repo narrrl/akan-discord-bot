@@ -4,6 +4,8 @@ import de.nirusu99.akan.commands.CommandContext;
 import de.nirusu99.akan.commands.ICommand;
 import de.nirusu99.akan.core.GuildMusicManager;
 import de.nirusu99.akan.core.PlayerManager;
+import de.nirusu99.akan.utils.DiscordUtil;
+
 import org.kohsuke.MetaInfServices;
 
 import java.util.regex.Matcher;
@@ -15,6 +17,12 @@ public final class Resume implements ICommand {
 
     @Override
     public void run(CommandContext ctx) {
+        
+        if (!DiscordUtil.areInSameVoice(ctx.getMember(), ctx.getSelfMember())) {
+            ctx.reply("You must be in the same voice channel!");
+            return;
+        }
+
         PlayerManager manager = PlayerManager.getInstance();
         GuildMusicManager musicManager = manager.getGuildMusicManager(ctx.getGuild());
         manager.pause(musicManager, false);

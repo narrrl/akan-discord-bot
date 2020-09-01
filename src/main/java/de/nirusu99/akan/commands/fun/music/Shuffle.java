@@ -4,6 +4,8 @@ import de.nirusu99.akan.commands.CommandContext;
 import de.nirusu99.akan.commands.ICommand;
 import de.nirusu99.akan.core.GuildMusicManager;
 import de.nirusu99.akan.core.PlayerManager;
+import de.nirusu99.akan.utils.DiscordUtil;
+
 import org.kohsuke.MetaInfServices;
 
 import java.util.regex.Matcher;
@@ -15,18 +17,22 @@ public final class Shuffle implements ICommand {
 
     @Override
     public void run(CommandContext ctx) {
+
+        if (!DiscordUtil.areInSameVoice(ctx.getMember(), ctx.getSelfMember())) {
+            ctx.reply("You must be in the same voice channel!");
+            return;
+        }
+
         PlayerManager manager = PlayerManager.getInstance();
         GuildMusicManager musicManager = manager.getGuildMusicManager(ctx.getGuild());
 
         if (musicManager.getPlayer().getPlayingTrack() == null) {
-            ctx.getChannel().sendTyping().queue(rep ->
-                    ctx.getChannel().sendMessage("No music is playing!").queue());
+            ctx.reply("No music is playing!");
             return;
         }
 
         manager.shuffle(musicManager);
-        ctx.getChannel().sendTyping().queue(rep ->
-                ctx.getChannel().sendMessage("Shuffled queue!").queue());
+        ctx.reply("Shuffled queue!");
     }
 
     @Override

@@ -5,6 +5,7 @@ import de.nirusu99.akan.commands.CommandContext;
 import de.nirusu99.akan.commands.ICommand;
 import de.nirusu99.akan.core.GuildMusicManager;
 import de.nirusu99.akan.core.PlayerManager;
+import de.nirusu99.akan.utils.DiscordUtil;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -17,18 +18,22 @@ public final class Next implements ICommand {
         PlayerManager manager = PlayerManager.getInstance();
         GuildMusicManager musicManager = manager.getGuildMusicManager(ctx.getGuild());
         AudioTrack prev = musicManager.getPlayer().getPlayingTrack();
-        if (prev == null) {
-            ctx.getChannel().sendTyping().queue(rep ->
-                    ctx.getChannel().sendMessage("Nothing is playing!").queue());
+
+        if (!DiscordUtil.areInSameVoice(ctx.getMember(), ctx.getSelfMember())) {
+            ctx.reply("You must be in the same voice channel!");
             return;
         }
+
+        if (prev == null) {
+            ctx.reply("Nothing is playing!");
+            return;
+        }
+
         manager.next(musicManager);
         AudioTrack next = musicManager.getPlayer().getPlayingTrack();
         String prevText = prev.getInfo().author + " - " + prev.getInfo().title;
         String nextText = next != null ? next.getInfo().author + " - " + next.getInfo().title : "End of queue";
-        ctx.getChannel().sendTyping().queue(rep ->
-                ctx.getChannel().sendMessage("Skipped: " + prevText).queue(rep2 ->
-                        ctx.getChannel().sendMessage("Now playing: " + nextText).queue()));
+        ctx.reply("Skipped: " + prevText + "\n" + "Now playing: " + nextText);
     }
 
     @Override

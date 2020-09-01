@@ -7,8 +7,6 @@ import de.nirusu99.akan.core.GuildMusicManager;
 import de.nirusu99.akan.core.PlayerManager;
 import de.nirusu99.akan.utils.Const;
 import de.nirusu99.akan.utils.DiscordUtil;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.VoiceChannel;
 import org.kohsuke.MetaInfServices;
 
 import java.util.regex.Matcher;
@@ -23,21 +21,15 @@ public final class Volume implements ICommand {
         if (ctx.getArgs().size() != 1) {
             throw new IllegalArgumentException(Error.INVALID_ARGUMENTS.toString());
         }
+        
+        if (!DiscordUtil.areInSameVoice(ctx.getMember(), ctx.getSelfMember())) {
+            ctx.reply("You must be in the same voice channel!");
+            return;
+        }
+
         PlayerManager manager = PlayerManager.getInstance();
         GuildMusicManager musicManager = manager.getGuildMusicManager(ctx.getGuild());
-        Member author = ctx.getMember();
-        VoiceChannel channel = DiscordUtil.findVoiceChannel(ctx.getSelfMember());
-        VoiceChannel authorChannel = DiscordUtil.findVoiceChannel(author);
-        if (channel == null) {
-            ctx.getChannel().sendTyping().queue(rep ->
-                    ctx.getChannel().sendMessage("Bot isn't in a voice channel!").queue());
-            return;
-        }
-        if (!channel.equals(authorChannel)) {
-            ctx.getChannel().sendTyping().queue(rep ->
-                    ctx.getChannel().sendMessage("You must be in the same channel as the bot!").queue());
-            return;
-        }
+
         int volume;
         try {
             volume = Integer.parseInt(ctx.getArgs().get(0));

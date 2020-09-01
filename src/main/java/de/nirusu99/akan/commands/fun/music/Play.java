@@ -25,23 +25,8 @@ public final class Play implements ICommand {
                     INVALID_ARGUMENTS.toString());
         }
 
-        VoiceChannel channel = DiscordUtil.findVoiceChannel(ctx.getMember());
-
-        if (channel == null) {
-            ctx.getChannel().sendTyping().queue(rep ->
-                    ctx.getChannel()
-                    .sendMessage("You must be in a voice channel!").queue());
-            return;
-        }
-
-        VoiceChannel botChannel = DiscordUtil.findVoiceChannel(ctx
-                .getSelfMember());
-
-        if (botChannel != null && !botChannel.equals(channel)) {
-            ctx.getChannel().sendTyping().queue(rep ->
-                    ctx.getChannel()
-                    .sendMessage("You must be in the same voice channel!")
-                    .queue());
+        if (!DiscordUtil.areInSameVoice(ctx.getMember(), ctx.getSelfMember())) {
+            ctx.reply("You must be in the same voice channel!");
             return;
         }
 
@@ -51,7 +36,7 @@ public final class Play implements ICommand {
         manager.getGuildMusicManager(ctx.getGuild()).getPlayer()
                 .setVolume(ctx.getBot().getLogger().getVolume(ctx.getGuild().getIdLong()));
 
-        ctx.getGuild().getAudioManager().openAudioConnection(channel);
+        ctx.getGuild().getAudioManager().openAudioConnection(DiscordUtil.findVoiceChannel(ctx.getMember()));
     }
 
     @Override
