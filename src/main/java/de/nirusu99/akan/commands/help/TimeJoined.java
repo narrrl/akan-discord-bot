@@ -16,19 +16,16 @@ public class TimeJoined implements ICommand {
     @Override
     public void run(CommandContext ctx) {
         if (ctx.getArgs().size() != 1) {
-            ctx.getChannel().sendTyping().queue(rep ->
-                    ctx.getChannel().sendMessage(Error.INVALID_ARGUMENTS.toString()).queue());
+            ctx.reply(Error.INVALID_ARGUMENTS.toString());
             return;
         }
         List<Member> mentioned = ctx.getMessage().getMentionedMembers();
         if (mentioned.size() == 0) {
-            ctx.getChannel().sendTyping().queue(rep ->
-                    ctx.getChannel().sendMessage("invalid user").queue());
+            ctx.reply("Invalid user");
             return;
         }
-        ctx.getChannel().sendTyping().queue(rep ->
-                ctx.getChannel().sendMessage(mentioned.get(0).getTimeJoined()
-                        .format(DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm"))).queue());
+        ctx.reply(mentioned.get(0).getTimeJoined()
+                        .format(DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm")));
     }
 
     @Override

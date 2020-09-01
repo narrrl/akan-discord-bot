@@ -40,7 +40,7 @@ public final class Neko implements ICommand {
                 amount = Integer.parseInt(args.get(0));
             } catch (NumberFormatException e) {
                 e.printStackTrace();
-                ctx.getChannel().sendMessage("Wups something went wrong, contact admin pls :(").queue();
+                ctx.reply("Wups something went wrong :(");
                 return;
             }
         }
@@ -51,7 +51,7 @@ public final class Neko implements ICommand {
             images = Host.getNekos("neko", amount);
         } catch (IOException e) {
             e.printStackTrace();
-            ctx.getChannel().sendMessage("Wups something went wrong, contact admin pls :(").queue();
+            ctx.reply("Wups something went wrong :(");
             return;
         }
 
@@ -61,7 +61,7 @@ public final class Neko implements ICommand {
         for (Image image : images) {
             emb = new EmbedBuilder();
             emb.setColor(Color.PINK).setImage(image.getUrl()).setTitle("Nya~", image.getUrl());
-            ctx.getChannel().sendMessage(emb.build()).queue();;
+            ctx.reply(emb.build());
         }
     }
 

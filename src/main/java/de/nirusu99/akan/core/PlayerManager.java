@@ -55,29 +55,25 @@ public class PlayerManager {
             @Override
             public void trackLoaded(@Nonnull AudioTrack track) {
                 play(musicManager, track);
-                ctx.getChannel().sendTyping().queue(rep ->
-                        ctx.getChannel().sendMessage("Loaded: " + track.getInfo().author
-                                + "-" + track.getInfo().title).queue());
+                ctx.reply("Loaded: " + track.getInfo().author
+                                + "-" + track.getInfo().title);
             }
 
             @Override
             public void playlistLoaded(@Nonnull final AudioPlaylist playlist) {
                 playlist.getTracks().forEach(track -> play(musicManager, track));
-                ctx.getChannel().sendTyping().queue(rep ->
-                        ctx.getChannel().sendMessage("Loaded: Playlist: " + playlist.getName()).queue());
+                ctx.reply("Loaded: Playlist: " + playlist.getName());
             }
 
             @Override
             public void noMatches() {
-                ctx.getChannel().sendTyping().queue(rep ->
-                        ctx.getChannel().sendMessage("Couldn't find: " + trackUrl).queue());
+                ctx.reply("Couldn't find: " + trackUrl);
             }
 
             @Override
             public void loadFailed(@Nonnull FriendlyException exception) {
                 ctx.getBot().printInfo(exception.getMessage());
-                ctx.getChannel().sendTyping().queue(rep ->
-                        ctx.getChannel().sendMessage("Well done, you destroyed the bot, volvo pls fix...").queue());
+                ctx.reply("Well done, you destroyed the bot, volvo pls fix...");
             }
         });
     }

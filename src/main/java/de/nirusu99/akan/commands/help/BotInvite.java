@@ -26,8 +26,7 @@ public final class BotInvite implements ICommand {
                 + ctx.getJDA().getSelfUser().getId() + "&scope=bot&permissions=8")
                 .setThumbnail(ctx.getJDA().getSelfUser().getEffectiveAvatarUrl())
                 .setDescription("See you soon, master!").setColor(Color.PINK);
-        ctx.getChannel().sendTyping().queue(rep ->
-                ctx.getChannel().sendMessage(emb.build()).queue());
+        ctx.reply(emb.build());
     }
 
     @Override

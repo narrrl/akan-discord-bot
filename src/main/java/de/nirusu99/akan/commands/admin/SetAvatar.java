@@ -29,25 +29,22 @@ public final class SetAvatar implements ICommand {
     private static final Pattern PATTERN = Pattern.compile("setavatar");
 
     @Override
-    public void run(@Nonnull CommandContext cfx) {
-        if (AkanBot.userIsOwner(cfx.getAuthor())) {
-            List<Message.Attachment> attachment = cfx.getMessage().getAttachments();
+    public void run(@Nonnull CommandContext ctx) {
+        if (AkanBot.userIsOwner(ctx.getAuthor())) {
+            List<Message.Attachment> attachment = ctx.getMessage().getAttachments();
             if (attachment.size() != 1) {
-                cfx.getChannel().sendTyping().queue(rep ->
-                        cfx.getChannel().sendMessage("You must attach a image.").queue());
+                ctx.reply("You must attach an image");
                 return;
             }
             try {
                 InputStream s = new URL(attachment.get(0).getUrl()).openStream();
-                cfx.getJDA().getSelfUser().getManager().setAvatar(Icon.from(s)).queue(rep ->
-                        cfx.getChannel().sendTyping().queue(msg ->
-                                cfx.getChannel().sendMessage("updated avatar!").queue()));
+                ctx.getJDA().getSelfUser().getManager().setAvatar(Icon.from(s)).queue();
             } catch (IOException e) {
                 throw new IllegalArgumentException(e.getMessage());
             }
+            ctx.reply("Updated avatar!");
         } else {
-            cfx.getChannel().sendTyping().queue(rep ->
-                    cfx.getChannel().sendMessage(Error.NOT_OWNER.toString()).complete());
+            ctx.reply(Error.NOT_OWNER.toString());
         }
     }
 

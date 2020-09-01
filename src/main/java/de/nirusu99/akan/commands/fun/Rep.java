@@ -26,16 +26,18 @@ public final class Rep implements ICommand {
     public void run(@Nonnull CommandContext ctx) {
         List<String> args = ctx.getArgs();
         if (args.isEmpty()) {
-            ctx.getChannel().sendTyping().queue(rep ->
-                    ctx.getChannel().sendMessage(EmoteConverter.convertRegionalIndicators("kek")).queue());
+            ctx.reply(EmoteConverter.convertRegionalIndicators("kek"));
             return;
         }
         StringBuilder out = new StringBuilder();
         args.forEach(i -> out.append(i).append(" "));
+        int i = 0;
+        final int limit = 5;
         for (String str : EmoteConverter
                 .convertRegionalIndicators(out.substring(0, out.length() - 1)).split(" ", -1)) {
-            ctx.getChannel().sendTyping().queue(rep ->
-                    ctx.getChannel().sendMessage(str).queue());
+            ctx.reply(str);
+            i++;
+            if (i == limit) break;
         }
     }
 

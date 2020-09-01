@@ -32,15 +32,13 @@ public final class SuccessReaction implements ICommand {
         if (AkanBot.userIsOwner(ctx.getAuthor())) {
             List<String> args = ctx.getArgs();
             if (args.size() != 1) {
-                ctx.getChannel().sendTyping().queue(rep ->
-                        ctx.getChannel().sendMessage(Error.INVALID_ARGUMENTS.toString()).queue());
+                ctx.reply(Error.INVALID_ARGUMENTS.toString());
                 return;
             }
             ctx.setSuccessReaction(Boolean.parseBoolean(args.get(0)));
 
         } else {
-            ctx.getChannel().sendTyping().queue(rep ->
-                    ctx.getChannel().sendMessage(Error.NOT_OWNER.toString()).queue());
+            ctx.reply(Error.NOT_OWNER.toString());
         }
     }
 

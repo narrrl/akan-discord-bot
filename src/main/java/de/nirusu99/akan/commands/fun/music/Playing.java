@@ -24,8 +24,7 @@ public final class Playing implements ICommand {
         final AudioTrack track = manager.getPlaying(musicManager);
 
         if (track == null) {
-            ctx.getChannel().sendTyping().queue(rep ->
-                    ctx.getChannel().sendMessage("No music is playing!").queue());
+            ctx.reply("No music is playing!");
             return;
         }
 
@@ -34,8 +33,7 @@ public final class Playing implements ICommand {
         emb.setColor(Color.PINK).setThumbnail(ctx.getGuild().getIconUrl())
             .setTitle("Now playing:", info.uri)
             .setDescription(info.author + " - " + info.title);
-        ctx.getChannel().sendTyping().queue(rep ->
-                ctx.getChannel().sendMessage(emb.build()).queue());
+        ctx.reply(emb.build());
     }
 
     @Override

@@ -30,8 +30,7 @@ public final class Avatar  implements ICommand {
             emb.setTitle(m.getUser().getAsTag(), m.getUser().getAvatarUrl())
                     .setImage(m.getUser().getEffectiveAvatarUrl() + "?size=512")
             .setColor(Color.PINK);
-            ctx.getChannel().sendTyping().queue(rep ->
-                    ctx.getChannel().sendMessage(emb.build()).queue());
+            ctx.reply(emb.build());
         }
 
     }

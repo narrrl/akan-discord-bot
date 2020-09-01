@@ -25,8 +25,7 @@ public final class Mock implements ICommand {
     public void run(@Nonnull CommandContext ctx) {
         List<String> args = ctx.getArgs();
         if (args.isEmpty()) {
-            ctx.getChannel().sendTyping().queue(rep ->
-                    ctx.getChannel().sendMessage("No message provided").queue());
+            ctx.reply("");
             return;
         }
         StringBuilder input = new StringBuilder();
@@ -39,8 +38,7 @@ public final class Mock implements ICommand {
             c = comp == 1 ? Character.toUpperCase(c) : Character.toLowerCase(c);
             out.append(c);
         }
-        ctx.getChannel().sendTyping().queue(rep ->
-            ctx.getChannel().sendMessage(out.toString()).queue());
+        ctx.reply(out.toString());
     }
 
     @Override

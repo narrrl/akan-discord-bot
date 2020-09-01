@@ -29,8 +29,8 @@ public final class Search implements ICommand {
             + ")( " + Const.INT_REGEX + ")?( " + Const.INT_REGEX + ")?");
 
     @Override
-    public void run(@Nonnull CommandContext cfx) {
-        List<String> args = cfx.getArgs();
+    public void run(@Nonnull CommandContext ctx) {
+        List<String> args = ctx.getArgs();
         int amount;
         int page;
         if (args.size() >= 3) {
@@ -50,8 +50,7 @@ public final class Search implements ICommand {
         String tags = args.get(1);
         Collection<Image> images = Host.getHost(args.get(0)).searchForImages(tags, amount, page);
         if (images.size() == 0) {
-            cfx.getChannel().sendTyping().queue(rep ->
-                    cfx.getChannel().sendMessage("no pictures found for tags " + tags).queue());
+            ctx.reply("no pictures found for tags " + tags);
         } else {
             for (Image img : images) {
                 final EmbedBuilder emb; emb = new EmbedBuilder();
@@ -60,11 +59,9 @@ public final class Search implements ICommand {
                             .setFooter(img.getSource())
                             .setTitle(img.getId(), img.getPostUrl())
                             .setColor(Color.PINK);
-                    cfx.getChannel().sendTyping().queue(rep ->
-                            cfx.getChannel().sendMessage(emb.build()).queue());
+                    ctx.reply(emb.build());
                 } else {
-                    cfx.getChannel().sendTyping().queue(rep ->
-                            cfx.getChannel().sendMessage(img.getUrl()).queue());
+                    ctx.reply(img.getUrl());
                 }
             }
         }

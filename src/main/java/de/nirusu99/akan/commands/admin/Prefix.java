@@ -27,18 +27,15 @@ public final class Prefix implements ICommand {
     public void run(@Nonnull CommandContext ctx) {
         List<String> args = ctx.getArgs();
         if (args.size() != 1) {
-            ctx.getChannel().sendTyping().queue(rep ->
-                    ctx.getChannel().sendMessage("invalid arguments").queue());
+            ctx.reply(Error.INVALID_ARGUMENTS.toString());
+            return;
         }
         if (AkanBot.userIsOwner(ctx.getAuthor())) {
             String newPrefix = args.get(0);
             ctx.setPrefix(newPrefix);
-            ctx.getChannel().sendTyping().queue(rep ->
-                    ctx.getChannel()
-                            .sendMessage("Prefix was set to " + newPrefix + " <:remV:639621688887083018>")
-                            .queue());
+            ctx.reply("Prefix was set to " + newPrefix + " <:remV:639621688887083018>");
         } else {
-            throw new IllegalArgumentException(Error.NOT_OWNER.toString());
+            ctx.reply(Error.NOT_OWNER.toString());
         }
     }
 

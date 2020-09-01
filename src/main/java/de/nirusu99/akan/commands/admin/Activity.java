@@ -31,19 +31,16 @@ public final class Activity implements ICommand {
         if (AkanBot.userIsOwner(ctx.getAuthor())) {
             List<String> args = ctx.getArgs();
             if (args.size() < 2) {
-                ctx.getChannel().sendTyping().queue(rep ->
-                        ctx.getChannel().sendMessage(Error.INVALID_ARGUMENTS.toString()).queue());
+                ctx.reply(Error.INVALID_ARGUMENTS.toString());
                 return;
             }
             StringBuilder status = new StringBuilder();
             args.subList(1, args.size()).forEach(i -> status.append(i).append(" "));
             ctx.getShardManager().setActivity(ActivitySetter
                     .set(args.get(0), status.toString().substring(0, status.length() - 1), ctx.getBot()));
-            ctx.getChannel().sendTyping().queue(rep ->
-                    ctx.getChannel().sendMessage("Updated activity!").queue());
+            ctx.reply("Updated activity");
         } else {
-            ctx.getChannel().sendTyping().queue(rep ->
-                    ctx.getChannel().sendMessage(Error.NOT_OWNER.toString()).queue());
+            ctx.reply(Error.NOT_OWNER.toString());
         }
     }
 

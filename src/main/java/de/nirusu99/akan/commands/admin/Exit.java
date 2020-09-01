@@ -3,6 +3,7 @@ package de.nirusu99.akan.commands.admin;
 import de.nirusu99.akan.AkanBot;
 import de.nirusu99.akan.commands.CommandContext;
 import de.nirusu99.akan.commands.ICommand;
+import de.nirusu99.akan.core.PlayerManager;
 import de.nirusu99.akan.commands.Error;
 import net.dv8tion.jda.api.entities.User;
 import org.kohsuke.MetaInfServices;
@@ -29,18 +30,16 @@ public final class Exit implements ICommand {
     }
 
     @Override
-    public void run(@Nonnull CommandContext cfx) {
-        if (AkanBot.userIsOwner(cfx.getAuthor())) {
-            cfx.getChannel().sendMessage("bai bai!").queue();
-            cfx.getChannel().sendMessage("<:megu:666743067755151360>").complete();
-            cfx.printInfo("Shutting down");
-            if (cfx.getShardManager() != null) {
-                cfx.getShardManager().shutdown(); // bot sometimes won't shutdown, hope this fixes it
+    public void run(@Nonnull CommandContext ctx) {
+        if (AkanBot.userIsOwner(ctx.getAuthor())) {
+            ctx.reply("bai bai!\n<:megu:666743067755151360>");
+            ctx.printInfo("Shutting down");
+            if (ctx.getShardManager() != null) {
+                ctx.getShardManager().shutdown(); // bot sometimes won't shutdown, hope this fixes it
             }
-            cfx.getJDA().shutdown();
+            ctx.getJDA().shutdown();
         } else {
-            cfx.getChannel().sendTyping().queue(rep ->
-                    cfx.getChannel().sendMessage(Error.NOT_OWNER.toString()).queue());
+            ctx.reply(Error.NOT_OWNER.toString());
         }
     }
 

@@ -26,33 +26,30 @@ public final class Help implements ICommand {
     private static final Pattern PATTERN = Pattern.compile("help( " + Const.NAMING_REGEX + ")?");
 
     @Override
-    public void run(CommandContext cfx) {
-        if (cfx.getArgs().isEmpty()) {
+    public void run(CommandContext ctx) {
+        if (ctx.getArgs().isEmpty()) {
             StringBuilder out = new StringBuilder();
             CommandBuilder.getCommands().forEach(cmd -> out.append(cmd.getName()).append("\n"));
             EmbedBuilder emb = new EmbedBuilder();
             emb.setTitle("All Commands:").setDescription(out.toString().substring(0, out.length() - 1))
-                    .setThumbnail(cfx.getSelfUser().getAvatarUrl()).setColor(Color.PINK);
-            cfx.getChannel().sendTyping().queue(rep ->
-                    cfx.getChannel().sendMessage(emb.build()).queue());
+                    .setThumbnail(ctx.getSelfUser().getAvatarUrl()).setColor(Color.PINK);
+            ctx.reply(emb.build());
             return;
         }
         for (ICommand cmd : CommandBuilder.getCommands()) {
-            if (cmd.getName().equals(cfx.getArgs().get(0))) {
+            if (cmd.getName().equals(ctx.getArgs().get(0))) {
                 EmbedBuilder emb = new EmbedBuilder();
                 emb.setTitle(cmd.getName())
-                        .setThumbnail(cfx.getGuild().getIconUrl())
+                        .setThumbnail(ctx.getGuild().getIconUrl())
                         .setDescription("**Description**:\n" + cmd.toString()
                                 + LINE_BREAK + "\n\n**Syntax**:\n" + cmd.syntax())
                         .setImage(cmd.gifHelpUrl())
                         .setColor(Color.PINK);
-                cfx.getChannel().sendTyping().queue(rep ->
-                        cfx.getChannel().sendMessage(emb.build()).queue());
+                ctx.reply(emb.build());
                 return;
             }
         }
-        cfx.getChannel().sendTyping().queue(rep ->
-                cfx.getChannel().sendMessage("Command not found").queue());
+        ctx.reply("Command not found");
     }
 
     @Override

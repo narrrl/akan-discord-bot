@@ -29,13 +29,11 @@ public class Delete implements ICommand {
     public void run(CommandContext ctx) {
         List<String> args = ctx.getArgs();
         if (args.size() > 2) {
-            ctx.getChannel().sendTyping().queue(rep ->
-                    ctx.getChannel().sendMessage(Error.INVALID_ARGUMENTS.toString()).queue());
+            ctx.reply(Error.INVALID_ARGUMENTS.toString());
             return;
         }
         if (!ctx.getMember().hasPermission(Permission.ADMINISTRATOR)) {
-            ctx.getChannel().sendTyping().queue(rep ->
-                    ctx.getChannel().sendMessage(Error.NO_PERMISSION.toString()).queue());
+            ctx.reply(Error.NO_PERMISSION.toString());
             return;
         }
         final TextChannel channel = ctx.getChannel();
@@ -59,8 +57,7 @@ public class Delete implements ICommand {
         }
         final Member target = targets.get(0);
         if (target == null) {
-            ctx.getChannel().sendTyping().queue(rep ->
-                    ctx.getChannel().sendMessage("invalid user!").queue());
+            ctx.reply("Invalid user!");
             return;
         }
         channel.getHistory().retrievePast(amount).complete().forEach(msg -> {

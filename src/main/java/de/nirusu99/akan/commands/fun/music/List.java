@@ -25,8 +25,7 @@ public final class List implements ICommand {
         final AudioTrack track = manager.getPlaying(musicManager);
 
         if (track == null) {
-            ctx.getChannel().sendTyping().queue(rep ->
-                    ctx.getChannel().sendMessage("No music is playing!").queue());
+            ctx.reply("No music is playing!");
             return;
         }
 
@@ -55,7 +54,7 @@ public final class List implements ICommand {
             if (out.length() > 1800) {
 
                 emb.setDescription(out.toString().substring(0, out.length()));
-                ctx.getChannel().sendMessage(emb.build()).queue();
+                ctx.reply(emb.build());
                 out = new StringBuilder();
 
                 totalEmbs++;
@@ -67,7 +66,7 @@ public final class List implements ICommand {
 
        if (out.length() != 0) {
            emb.setDescription(out.toString().substring(0, out.length()));
-           ctx.getChannel().sendMessage(emb.build()).queue();
+           ctx.reply(emb.build());
 
        }
 

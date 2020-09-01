@@ -28,23 +28,18 @@ public final class SearchTag implements ICommand {
     public void run(@Nonnull CommandContext ctx) {
         List<String> args = ctx.getArgs();
         if (args.size() != 2) {
-            ctx.getChannel().sendTyping().queue(rep ->
-                    ctx.getChannel().sendMessage(Error.INVALID_ARGUMENTS.toString()).queue());
+            ctx.reply(Error.INVALID_ARGUMENTS.toString());
             return;
         }
         String tags = args.get(1);
         String amount = Host.getHost(args.get(0)).searchForAmount(tags);
         if (amount == null) {
-            throw new IllegalArgumentException("Woops something went wrong");
+            ctx.reply("Woops something went wrong");
+            return;
         }
-        ctx.getChannel().sendTyping()
-                .queue(rep ->
-                ctx.getChannel().sendMessage("found " + amount
+        ctx.reply("found " + amount
                         .replace("\n", "")
-                        .replace(" ", "") + " pictures for tags: " + args.get(1))
-                        .queue(rep2 ->
-                ctx.getChannel().sendMessage("<:wink:642062516595195904>")
-                        .queue()));
+                        .replace(" ", "") + " pictures for tags: " + args.get(1) + "\n<:wink:642062516595195904>");
     }
 
     @Override
