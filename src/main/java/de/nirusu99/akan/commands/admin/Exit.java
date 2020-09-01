@@ -32,7 +32,6 @@ public final class Exit implements ICommand {
     @Override
     public void run(@Nonnull CommandContext ctx) {
         if (AkanBot.userIsOwner(ctx.getAuthor())) {
-            ctx.reply("bai bai!\n<:megu:666743067755151360>");
             ctx.printInfo("Shutting down");
             if (ctx.getShardManager() != null) {
                 ctx.getShardManager().shutdown(); // bot sometimes won't shutdown, hope this fixes it
