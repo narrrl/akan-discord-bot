@@ -13,9 +13,7 @@ de.nirusu99.akan.commands.fun.SearchTag
 de.nirusu99.akan.commands.fun.music.Play
 de.nirusu99.akan.commands.fun.music.Playing
 de.nirusu99.akan.commands.fun.music.Volume
-de.nirusu99.akan.commands.fun.music.Resume
 de.nirusu99.akan.commands.fun.music.Pause
-de.nirusu99.akan.commands.fun.music.Resume
 de.nirusu99.akan.commands.fun.music.Next
 de.nirusu99.akan.commands.fun.music.Stop
 de.nirusu99.akan.commands.admin.Delete
