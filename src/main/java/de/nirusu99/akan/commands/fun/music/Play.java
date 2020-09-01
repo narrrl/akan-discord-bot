@@ -7,6 +7,7 @@ import de.nirusu99.akan.core.PlayerManager;
 import de.nirusu99.akan.utils.Const;
 import de.nirusu99.akan.utils.DiscordUtil;
 import net.dv8tion.jda.api.entities.VoiceChannel;
+
 import org.kohsuke.MetaInfServices;
 
 import java.util.regex.Matcher;
@@ -25,7 +26,9 @@ public final class Play implements ICommand {
                     INVALID_ARGUMENTS.toString());
         }
 
-        if (!DiscordUtil.areInSameVoice(ctx.getMember(), ctx.getSelfMember())) {
+        VoiceChannel channel = DiscordUtil.findVoiceChannel(ctx.getSelfMember());
+
+        if (channel != null && !DiscordUtil.areInSameVoice(ctx.getMember(), ctx.getSelfMember())) {
             ctx.reply("You must be in the same voice channel!");
             return;
         }
