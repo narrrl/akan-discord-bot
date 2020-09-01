@@ -3,6 +3,7 @@ package de.nirusu99.akan.commands;
 import de.nirusu99.akan.AkanBot;
 import me.duncte123.botcommons.commands.ICommandContext;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import javax.annotation.Nonnull;
@@ -34,7 +35,7 @@ public class CommandContext implements ICommandContext {
         return this.event;
     }
 
-    public void printInfo(final String message) {
+    public synchronized void printInfo(final String message) {
         bot.printInfo(message);
     }
 
@@ -42,11 +43,21 @@ public class CommandContext implements ICommandContext {
         return args;
     }
 
-    public void setPrefix(@Nonnull final String newPrefix) {
+    public synchronized void setPrefix(@Nonnull final String newPrefix) {
         bot.setPrefix(newPrefix);
     }
 
-    public void setSuccessReaction(final boolean parseBoolean) {
+    public synchronized void setSuccessReaction(final boolean parseBoolean) {
         bot.setSuccessReaction(parseBoolean);
+    }
+
+    public synchronized void reply(final String message) {
+        getChannel().sendTyping().queue(rep ->
+            getChannel().sendMessage(message).queue());
+    }
+
+    public synchronized void reply(final MessageEmbed emb) {
+        getChannel().sendTyping().queue(rep ->
+            getChannel().sendMessage(emb).queue());
     }
 }
