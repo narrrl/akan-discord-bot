@@ -1,7 +1,7 @@
 # Akan Discord-Bot
 
 This Bot just is a fun project for my own Discord Server,
-don't expect high quality (it got even worde from time to time lol) code or unique features.
+don't expect high quality (it got even worse from time to time lol) code or unique features.
 You can download and edit the bot however you want.
 
 ## Installation
