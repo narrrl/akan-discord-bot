@@ -100,6 +100,10 @@ public class PlayerManager {
 
     }
 
+    public boolean repeat(@Nonnull final GuildMusicManager musicManager) {
+        return musicManager.getScheduler().setRepeat();
+    }
+
     public AudioTrack getPlaying(@Nonnull final GuildMusicManager musicManager) {
         return musicManager.getPlayer().getPlayingTrack();
     }

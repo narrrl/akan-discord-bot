@@ -43,14 +43,6 @@ public class CommandContext implements ICommandContext {
         return args;
     }
 
-    public synchronized void setPrefix(@Nonnull final String newPrefix) {
-        bot.setPrefix(newPrefix);
-    }
-
-    public synchronized void setSuccessReaction(final boolean parseBoolean) {
-        bot.setSuccessReaction(parseBoolean);
-    }
-
     public synchronized void reply(final String message) {
         getChannel().sendTyping().queue(rep ->
             getChannel().sendMessage(message).queue());

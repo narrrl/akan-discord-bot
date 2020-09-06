@@ -31,7 +31,7 @@ dependencies {
     implementation group: 'org.kohsuke.metainf-services', name: 'metainf-services', version: '1.8'
     implementation group: 'me.duncte123', name: 'botCommons', version: '1.0.88'
     implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1'
-    implementation 'net.dv8tion:JDA:4.1.1_155'
+    implementation 'net.dv8tion:JDA:4.2.0_204'
     implementation group: 'org.jdom', name: 'jdom2', version: '2.0.6'
     implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
     implementation 'commons-io:commons-io:2.6'

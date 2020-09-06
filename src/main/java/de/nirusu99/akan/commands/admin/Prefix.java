@@ -4,7 +4,10 @@ import de.nirusu99.akan.AkanBot;
 import de.nirusu99.akan.commands.CommandContext;
 import de.nirusu99.akan.commands.Error;
 import de.nirusu99.akan.commands.ICommand;
+import de.nirusu99.akan.core.GuildManager;
 import de.nirusu99.akan.utils.Const;
+import net.dv8tion.jda.api.Permission;
+
 import org.kohsuke.MetaInfServices;
 
 import javax.annotation.Nonnull;
@@ -30,12 +33,16 @@ public final class Prefix implements ICommand {
             ctx.reply(Error.INVALID_ARGUMENTS.toString());
             return;
         }
-        if (AkanBot.userIsOwner(ctx.getAuthor())) {
+        if (ctx.getMember().hasPermission(Permission.ADMINISTRATOR) || AkanBot.userIsOwner(ctx.getAuthor())) {
             String newPrefix = args.get(0);
-            ctx.setPrefix(newPrefix);
+            GuildManager gm = GuildManager.getManager(ctx.getGuild().getIdLong(), ctx.getBot());
+            if (!gm.setPrefix(newPrefix)) {
+                ctx.reply("Wups something went wrong");
+                return;
+            }
             ctx.reply("Prefix was set to " + newPrefix + " <:remV:639621688887083018>");
         } else {
-            ctx.reply(Error.NOT_OWNER.toString());
+            ctx.reply("Only admins can change the prefix!");
         }
     }
 
@@ -51,7 +58,7 @@ public final class Prefix implements ICommand {
 
     @Override
     public String toString() {
-        return "Changes the prefix of the bot. Only bot owner can do that";
+        return "Changes the prefix of the bot for this server.";
     }
 
     @Override

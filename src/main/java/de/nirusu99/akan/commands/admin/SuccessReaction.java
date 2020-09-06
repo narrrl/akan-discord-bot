@@ -4,7 +4,9 @@ import de.nirusu99.akan.AkanBot;
 import de.nirusu99.akan.commands.CommandContext;
 import de.nirusu99.akan.commands.Error;
 import de.nirusu99.akan.commands.ICommand;
+import de.nirusu99.akan.core.GuildManager;
 import de.nirusu99.akan.utils.Const;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.User;
 import org.kohsuke.MetaInfServices;
 
@@ -29,13 +31,18 @@ public final class SuccessReaction implements ICommand {
 
     @Override
     public void run(@Nonnull CommandContext ctx) {
-        if (AkanBot.userIsOwner(ctx.getAuthor())) {
+        if (AkanBot.userIsOwner(ctx.getAuthor()) || ctx.getMember().hasPermission(Permission.ADMINISTRATOR)) {
             List<String> args = ctx.getArgs();
             if (args.size() != 1) {
                 ctx.reply(Error.INVALID_ARGUMENTS.toString());
                 return;
             }
-            ctx.setSuccessReaction(Boolean.parseBoolean(args.get(0)));
+            GuildManager gm = GuildManager.getManager(ctx.getGuild().getIdLong(), ctx.getBot());
+            if (!gm.setSuccessReaction(Boolean.parseBoolean(args.get(0)))) {
+                ctx.reply("Wups something went wrong");
+                return;
+            }
+            ctx.reply("Reactions on command execution was set to " + args.get(0));
 
         } else {
             ctx.reply(Error.NOT_OWNER.toString());

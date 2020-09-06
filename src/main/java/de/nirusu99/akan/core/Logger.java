@@ -77,46 +77,63 @@ public final class Logger {
         }
     }
 
-    public synchronized int getVolume(final long guildId) {
-        File guildConf = null;
-        try {
-            guildConf = getConfig(guildId);
-        } catch (IllegalArgumentException e) {
-            return 100;
-        }
-        JSONObject object;
-        final int volume;
-        try {
-            JSONParser parser = new JSONParser();
-            object = (JSONObject) parser.parse(new FileReader(guildConf));
-            volume = Integer.parseInt((String) object.get("volume"));
-        } catch (IOException | ParseException e) {
-            throw new IllegalArgumentException(e.getMessage());
-        }
-        return volume;
-    }
-
-    public synchronized void setVolume(final long guildId, final int volume) {
-        File guildConf = null;
+    public synchronized boolean writeValueForGuild(final String key, final Object value, final long guildId) {
         createGuild(guildId);
+        File guildConf = null;
         try {
             guildConf = getConfig(guildId);
         } catch (IllegalArgumentException e) {
             bot.printInfo(e.getMessage());
-            return;
+            return false;
         }
+        write(guildConf, key, value);
+        return true;
+    }
+
+    public synchronized Object getValueForGuild(final String key, final long guildId) {
+        File guildConf = null;
+        guildConf = getConfig(guildId);
+        JSONObject obj;
         try {
             JSONParser parser = new JSONParser();
-            JSONObject object = (JSONObject) parser.parse(new FileReader(guildConf));
-            object.remove("volume");
-            object.put("volume", String.valueOf(volume));
-            writer = new FileWriter(guildConf);
+            obj = (JSONObject) parser.parse(new FileReader(guildConf));
+            Object value = obj.get(key);
+            if(value == null) {
+                throw new IllegalArgumentException("Key not found");
+            }
+            return value;
+        } catch (IOException | ParseException e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
+    }
+
+
+    public synchronized int getVolume(final long guildId) {
+        try {
+            return Integer.parseInt(String.valueOf(getValueForGuild("volume", guildId)));
+        } catch (IllegalArgumentException e) {
+            return 100;
+        }
+    }
+
+    public synchronized void setVolume(final long guildId, final int volume) {
+        writeValueForGuild("volume", volume, guildId);
+    }
+
+    public synchronized void write(File file, String key, Object value) {
+        try {
+            JSONParser parser = new JSONParser();
+            JSONObject object = (JSONObject) parser.parse(new FileReader(file));
+            object.remove(key);
+            object.put(key, value);
+            writer = new FileWriter(file);
             writer.write(object.toJSONString());
             writer.flush();
             writer.close();
         } catch (IOException | ParseException e) {
             bot.printInfo(e.getMessage());
         }
+
 
     }
 

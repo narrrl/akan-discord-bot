@@ -17,6 +17,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 public class TrackScheduler extends AudioEventAdapter {
     private final AudioPlayer player;
     private final BlockingQueue<AudioTrack> queue;
+    private boolean repeat = false;
 
     /**
      * @param player The audio player this scheduler uses
@@ -74,8 +75,18 @@ public class TrackScheduler extends AudioEventAdapter {
 
     @Override
     public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
+
+        if (repeat) {
+            queue(track.makeClone());
+        }
+
         if (endReason.mayStartNext) {
             nextTrack();
         }
+    }
+
+    public boolean setRepeat() {
+        this.repeat = !repeat;
+        return repeat;
     }
 }

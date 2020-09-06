@@ -4,6 +4,7 @@ import de.nirusu99.akan.commands.CommandContext;
 import de.nirusu99.akan.commands.ICommand;
 import de.nirusu99.akan.commands.CommandBuilder;
 import de.nirusu99.akan.core.Config;
+import de.nirusu99.akan.core.GuildManager;
 import de.nirusu99.akan.core.Logger;
 
 import javax.annotation.Nonnull;
@@ -12,33 +13,26 @@ import javax.security.auth.login.LoginException;
 import de.nirusu99.akan.utils.ActivitySetter;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import net.dv8tion.jda.api.events.user.UserActivityEndEvent;
-import net.dv8tion.jda.api.events.user.UserActivityStartEvent;
-import net.dv8tion.jda.api.events.user.update.UserUpdateOnlineStatusEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
 import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
-import java.util.List;
 
 public class AkanBot extends ListenerAdapter {
 
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(AkanBot.class);
     private static final String[] OWNERS = {"208979474988007425", "244607816587935746"};
+	public static final String PREFIX = "a!";
     private final Config conf;
     private final Logger log;
-    private String prefix;
 
     AkanBot() throws LoginException {
         conf = new Config(this);
         log = new Logger(this);
-        this.prefix = conf.getValue("prefix");
         DefaultShardManagerBuilder.createDefault(conf.getValue("token"))
                 .setAutoReconnect(true)
                 .setActivity(ActivitySetter.set(conf.getValue("activityType"), conf.getValue("activity"),
@@ -61,43 +55,12 @@ public class AkanBot extends ListenerAdapter {
         }
     }
 
-    /**
-     * Checks if the bot should add a reaction after getting a command message.
-     * This boolean is in the config.json and gets parsed by {@link Config#withSuccessReaction}
-     * @return true/false
-     */
-    public boolean withSuccessReaction() {
-        return conf.withSuccessReaction();
-    }
-
-    /**
-     * Sets if the bot should add a reaction after getting a command message.
-     * checkMark gets written in the config.json in {@link Config#setSuccessReaction(boolean)}
-     * @param successReaction new boolean for successReactions
-     */
-    public void setSuccessReaction(boolean successReaction) {
-        conf.setSuccessReaction(successReaction);
-    }
-
-    /**
-     * Sets the prefix of the bot
-     * @param prefix the new prefix
-     */
-    public void setPrefix(@Nonnull final String prefix) {
-        conf.setPrefix(prefix);
-        this.prefix = prefix;
-    }
-
     public void setActivity(@Nonnull final String status, @Nonnull final String type) {
         conf.setActivity(status, type);
     }
 
     public Logger getLogger() {
         return this.log;
-    }
-
-    public String getPrefix() {
-        return prefix;
     }
 
     public void printInfo(final String info) {
@@ -119,11 +82,13 @@ public class AkanBot extends ListenerAdapter {
         if (user.isBot()) {
             return;
         }
+        GuildManager gm = GuildManager.getManager(event.getGuild().getIdLong(), this);
         Message msg = event.getMessage();
         String content = msg.getContentRaw();
-        if (content.startsWith(this.prefix)
-                && content.length() > this.prefix.length()) {
-            String contentRaw = msg.getContentRaw().substring(this.prefix.length());
+        final String pf = gm.getPrefix();
+        if (content.startsWith(pf)
+                && content.length() > pf.length()) {
+            String contentRaw = msg.getContentRaw().substring(pf.length());
             ICommand cmd = CommandBuilder.createCommand(contentRaw);
             if (cmd == null) {
                 event.getChannel().sendTyping().queue();
@@ -133,7 +98,7 @@ public class AkanBot extends ListenerAdapter {
                 try {
                     String[] split = contentRaw.split("\\s+");
                     log.addLog(event, cmd);
-                    if (withSuccessReaction()) {
+                    if (gm.withSuccessReaction()) {
                         event.getMessage().addReaction("ayayayhyper:567486942086692872").queue();
                     }
                     cmd.run(new CommandContext(event, Arrays.asList(split).subList(1, split.length), this));
@@ -147,70 +112,7 @@ public class AkanBot extends ListenerAdapter {
     }
 
 
-    @Override
-    public void onUserActivityStart(UserActivityStartEvent event) {
 
-        if (event.getGuild().getIdLong() == 406435979671502849L && event.getNewActivity().getType().equals(Activity.ActivityType.STREAMING)) {
-
-            List<Role> streamingRoles = event.getGuild().getRolesByName("STREAMING", true);
-
-            if (streamingRoles.size() > 0) {
-
-                event.getGuild().addRoleToMember(event.getMember(), streamingRoles.get(0));
-
-                printInfo(event.getMember().getEffectiveName() + " started streaming");
-            }
-        }
-
-    }
-
-    @Override
-    public void onUserActivityEnd(UserActivityEndEvent event) {
-
-        if (event.getGuild().getIdLong() == 406435979671502849L && event.getOldActivity().getType().equals(Activity.ActivityType.STREAMING)) {
-
-            List<Role> streamingRoles = event.getGuild().getRolesByName("STREAMING", true);
-
-            if (streamingRoles.size() > 0) {
-
-                event.getGuild().removeRoleFromMember(event.getMember(), streamingRoles.get(0));
-
-
-                printInfo(event.getMember().getEffectiveName() + " stopped streaming");
-            }
-        }
-
-    }
-
-    @Override
-    public void onUserUpdateOnlineStatus(UserUpdateOnlineStatusEvent event) {
-
-        if (event.getGuild().getIdLong() == 406435979671502849L && event.getMember().getActivities().size() > 0) {
-
-            if (event.getMember().getActivities().get(0).getType().equals(Activity.ActivityType.STREAMING)) {
-                List<Role> streamingRoles = event.getGuild().getRolesByName("STREAMING", true);
-
-                if (streamingRoles.size() > 0) {
-
-                    event.getGuild().addRoleToMember(event.getMember(), streamingRoles.get(0));
-
-                    printInfo(event.getMember().getEffectiveName() + " started streaming");
-                }
-            } else if (!event.getMember().getActivities().get(0).getType().equals(Activity.ActivityType.STREAMING)) {
-                List<Role> streamingRoles = event.getGuild().getRolesByName("STREAMING", true);
-
-                if (streamingRoles.size() > 0) {
-
-                    event.getGuild().removeRoleFromMember(event.getMember(), streamingRoles.get(0));
-
-
-                    printInfo(event.getMember().getEffectiveName() + " stopped streaming");
-                }
-
-            }
-        }
-
-    }
 
     @Override
     public void onReady(@Nonnull ReadyEvent event) {

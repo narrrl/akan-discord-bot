@@ -31,18 +31,6 @@ public final class Config {
         return (String) obj.get(key);
     }
 
-    public boolean withSuccessReaction() {
-        return Boolean.parseBoolean((String) obj.get("successReaction"));
-    }
-
-    public synchronized void setSuccessReaction(final boolean b) {
-        write("successReaction", String.valueOf(b));
-    }
-
-    public synchronized void setPrefix(@Nonnull final String prefix) {
-        write("prefix", prefix);
-    }
-
     public synchronized void setActivity(@Nonnull final String status, @Nonnull final String type) {
         write("activity", status);
         write("activityType", type);

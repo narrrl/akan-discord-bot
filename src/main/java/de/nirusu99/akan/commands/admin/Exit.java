@@ -3,7 +3,6 @@ package de.nirusu99.akan.commands.admin;
 import de.nirusu99.akan.AkanBot;
 import de.nirusu99.akan.commands.CommandContext;
 import de.nirusu99.akan.commands.ICommand;
-import de.nirusu99.akan.core.PlayerManager;
 import de.nirusu99.akan.commands.Error;
 import net.dv8tion.jda.api.entities.User;
 import org.kohsuke.MetaInfServices;
